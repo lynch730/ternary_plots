@@ -37,6 +37,6 @@ wlimits = ternary_axes_limits( 100,'l',23,'low',...
      handle = ternary_axes( vgen, vout, vgrid, vtick, vlab );
       
 %% (5) Add ternary data to the plot
-%     ax = ternary_surf(ax, Z, wlimits );
+     handle = ternary_surf( handle, Z, wlimits );
  
  
