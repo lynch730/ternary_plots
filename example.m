@@ -26,12 +26,13 @@ wlimits = ternary_axes_limits( 100,'l',23,'low',...
 %% (4) Generate base axes to plot on
 %     
 %    4A - Specify Settings
-     vgen  = { 'wlimits', wlimits, 'usegridspace', false, 'gridspaceunit',6 };
+     vgen  = { 'wlimits', wlimits, 'usegridspace', false, ...
+              'gridspaceunit',6 , 'nameoffset', 0.15, 'axesshift', [0,0] };
      vout  = { 'LineWidth', 2, 'Color','k'};
      vgrid = { 'LineStyle','-','Color',[0 0 0 0.4] };
      vtick = { 'FontWeight','Bold', 'FontSize', 12 };
      vlab  = { 'FontWeight','Bold', 'FontSize', 14 };
-    
+     
 %    4B -  Create Ternary Axes
      ax = ternary_axes( vgen, vout, vgrid, vtick, vlab );
       

@@ -17,6 +17,9 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
 %     "gridspaceunit"  - (int/float ), Grid unit                  (default 6)
 %     "ticklinelength" - (float     ), Adds ticks to the outside  (default 0.05)
 %     "tick_fmt"       - (string    ), Tick text format 
+%     "axeslabels"     - (cell array), Names of Axes              
+%     "nameoffset"     - (float     ), Offset of axes title       (default 0)
+%     "axesshift"     - (float x2  ), Axes shift in x/y
 %
 %   (2) var_outline  - Triangle "box,"  inherited by "plot()" as varargin
 %   (3) var_grid     - Grid lines,      inherited by "plot()" as varargin
@@ -34,6 +37,9 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
     vg.gridspaceunit  = 6;
     vg.ticklinelength = 0.07; 
     vg.tick_fmt       = '%4.1f';
+    vg.axeslabels     = {'Variable 1','Variable 2','Variable 3'}; 
+    vg.nameoffset     = 0.0;
+    vg.axesshift     = [ -0.02, -0.05]; 
     
     % Overwrite fields if they are given
     if nargin>=1
@@ -68,8 +74,8 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
     ax = gca;
     
     % Apply a standard shift to improve colorbar placement
-    ax.Position(1) = ax.Position(1) - 0.03;
-    ax.Position(2) = ax.Position(2) - 0.06; 
+    ax.Position(1) = ax.Position(1) + vg.axesshift(1);
+    ax.Position(2) = ax.Position(2) + vg.axesshift(2); 
     
     % Turn on hold
     hold on
@@ -112,17 +118,39 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
             grid_pnts(i).values = linspace( 0, 1, vg.gridspaceunit );
         end
     end    
+    
+    %% Call creation of each element
 
-    %% Call creation of grid lines
-    handle = ternary_grid_lines( handle, grid_pnts, vg.ticklinelength, ...
-                                 var_grid );
+    % Call creation of grid lines
+    handle = ternary_grid_lines( handle, grid_pnts, vg.ticklinelength, var_grid );
     
-    %% Call Tick Labels
+    % Call Tick Labels
+    handle = ternary_tick_labels( handle, grid_pnts, vg.tick_fmt, ... 
+                                  vg.autoticksize, var_tick );
     
+    % Call Axis Lab  
+    handle = ternary_axes_names( handle, vg.nameoffset, vg.axeslabels, ...
+                                 var_label );
     
-    %% Call Axis Lab
+    % Link axes colors together
+    handle.tick.text = [];
+    for i=1:3
+        handle.axes_color_links(i) = linkprop( [ handle.grid.lines(:,i)    ; ...
+                                                 handle.outline.lines(i) ; ...
+                                                 handle.names.text(i)   ], ...
+                                                 'Color');
+    end 
     
-    %% Link axes colors together
+    %% Finalize Axes Appearance (need to repeat after subsequent plots)
+    
+    % Correct Axes framing
+    axis image;
 
+    % Turn off axes framing
+    axis off;
+    
+    % Default view
+    view(2);
+    
 end
 

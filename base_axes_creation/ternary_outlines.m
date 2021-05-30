@@ -12,10 +12,19 @@ function handle = ternary_outlines(handle, varargin)
     end
     
     % Loop grid lines
-    for iaxis=1:3      
+    for i=1:3      
         
-         handle.outline.lines(iaxis) = plot_ternary_line( iaxis, 0, ...
-                                        1.0, 0, varargin );
+        % Get axis of plot
+        iaxis = i - 1;
+        if (iaxis==0)
+            iaxis = 3;
+        end
+        
+        % Create line
+        handle.outline.lines(iaxis) = plot_ternary_line( i, 0, 1.0, 0, varargin );
+        
+        % Set above default gridlines
+        handle.outline.lines(iaxis).ZData=[0.1,0.1];
         
     end
     
