@@ -43,8 +43,10 @@ function handle = ternary_grid_lines( handle, grid_pnts, ticklinelength, ...
         end
         
         % Link properties related to formatting to each axes
-        props = {'LineStyle','LineWidth','Color','Visible'};
-        
+        props = {'LineStyle','LineWidth','Color','Visible','Marker',...
+           'MarkerEdgeColor','MarkerFaceColor','MarkerIndices',...
+           'Selected','MarkerSize'};
+            
         % Link Gridlines
         handle.grid.link_lines(iaxis) = linkprop(handle.grid.lines(:,iaxis),props);
         

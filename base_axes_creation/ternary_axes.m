@@ -131,7 +131,7 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
                                   vg.customshift, var_tick );
     
     % Call Axis Lab  
-    handle = ternary_axes_names( handle, vg.nameoffset, vg.axeslabels, ...
+    handle = ternary_axes_titles( handle, vg.nameoffset, vg.axeslabels, ...
                                  var_label );
     
     % Link axes colors together

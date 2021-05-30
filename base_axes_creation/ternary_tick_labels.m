@@ -59,8 +59,17 @@ function handle = ternary_tick_labels( handle, grid_pnts, wlimits, tick_fmt, ...
                                          'verticalalignment',  vz{iaxis},...
                                          'units','data',var_tick{:} );
             
-       end
+        end
+
+        % Link properties related to formatting all together
+        props = {'BackgroundColor','FontAngle','FontName','FontSize',...
+                'FontSmoothing','FontUnits','FontWeight','Interpreter',...
+                'LineStyle','LineWidth','Visible','Selected','Color'};
+
+        
+        % Link Tick Labels
+        handle.tick.link_text(iaxis) = linkprop(handle.tick.text(:,iaxis),props);
        
-   end
-   
+    end
+    
 end

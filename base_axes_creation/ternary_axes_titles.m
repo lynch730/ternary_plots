@@ -1,4 +1,4 @@
-function handle = ternary_axes_names( handle, offset, axes_labels, var_label )
+function handle = ternary_axes_titles( handle, offset, axes_labels, var_label )
 %ternary_axes_names plot axes titles
 %
 %   axes_labels is 3-element cell array
@@ -30,7 +30,7 @@ function handle = ternary_axes_names( handle, offset, axes_labels, var_label )
 
    %% Loop Axes
    for i=1:3
-       
+        
         % Get the axis to the right
         ip=i+1;
         if (ip==4)
@@ -50,8 +50,7 @@ function handle = ternary_axes_names( handle, offset, axes_labels, var_label )
                                    'verticalalignment',  'middle', ...
                                    'rotation', rot(i), ....
                                    var_label{:} );
-      
-   end
-   
 
+   end
+    
 end
