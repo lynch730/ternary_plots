@@ -12,7 +12,7 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
 %   (1) var_general: cell array containing options specific to ternary
 %   plots, identified in pairs with identifier strings: 
 %     "wlimits"        - (2x3 float ), Axis limits                (default 0-1)
-%     "autoticksize"   - (true/false), Use auto tick label sizes  (default on)
+%     "customshift"    - (2x3 float ), Custom Axes shift          (default given)
 %     "usegridspace"   - (true/false), Specify griddelta, not cnt (default false)
 %     "gridspaceunit"  - (int/float ), Grid unit                  (default 6)
 %     "ticklinelength" - (float     ), Adds ticks to the outside  (default 0.05)
@@ -32,10 +32,12 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
     % Create Defaults, overwrite if needed
     vg.wlimits(1,1:3) = 0; 
     vg.wlimits(2,1:3) = 1;  % default wlimits
-    vg.autoticksize   = true; 
+    vg.customshift(1:2,1) = [-0.03, 0.0]; %dx/dy
+    vg.customshift(1:2,2) = [-0.03, 0.0];
+    vg.customshift(1:2,3) = [  0.0, 0.0];
     vg.usegridspace   = false; 
     vg.gridspaceunit  = 6;
-    vg.ticklinelength = 0.07; 
+    vg.ticklinelength = 0.08; 
     vg.tick_fmt       = '%4.1f';
     vg.axeslabels     = {'Variable 1','Variable 2','Variable 3'}; 
     vg.nameoffset     = 0.0;
@@ -125,18 +127,18 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
     handle = ternary_grid_lines( handle, grid_pnts, vg.ticklinelength, var_grid );
     
     % Call Tick Labels
-    handle = ternary_tick_labels( handle, grid_pnts, vg.tick_fmt, ... 
-                                  vg.autoticksize, var_tick );
+    handle = ternary_tick_labels( handle, grid_pnts, vg.wlimits, vg.tick_fmt, ... 
+                                  vg.customshift, var_tick );
     
     % Call Axis Lab  
     handle = ternary_axes_names( handle, vg.nameoffset, vg.axeslabels, ...
                                  var_label );
     
     % Link axes colors together
-    handle.tick.text = [];
     for i=1:3
         handle.axes_color_links(i) = linkprop( [ handle.grid.lines(:,i)    ; ...
                                                  handle.outline.lines(i) ; ...
+                                                 handle.tick.text(:,i); ...
                                                  handle.names.text(i)   ], ...
                                                  'Color');
     end 
