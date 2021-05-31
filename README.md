@@ -9,7 +9,7 @@ MATLAB package for creating ternary plots. It is a major overhaul of the [Ternar
   2. **Custom Data Tip** - A custom Datatip is provided that outputs ternary coordinates rather than the typical X/Y coordinates.
   3. **Flexible Axes Limits** - Ternary axes can accept customized ranges, rather than simply 0 to 1. A/B/C coordinates need only sum to a constant value
   4. **Customized Axes** - Spacing of ticks and grid lines can be customized for each variable.
-  5. ** Wrapped Functions** - Ternary equivalents of MATLAB plot functions (e.g. surf, plot3, text, etc) pass the same optional arguments, enabling easy customization.
+  5. **Wrapped Functions** - Ternary equivalents of MATLAB plot functions (e.g. surf, plot3, text, etc) pass the same optional arguments, enabling easy customization.
   6. **Object Organization & Property Linking** - Ternary plot objects are organized in a single ternary plot handle, and have linked properties, making edits by hand more efficient.
   7. **Plot Layering** - Ternary plots can include multiple layers of plot elements, including combinations of surfaces, points, lines, text, and shapes. Lines and text are automatically "stacked" to be above surface or scatter plot. Support for text and shapes is in development, but can be implemented easily.
 
