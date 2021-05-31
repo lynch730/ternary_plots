@@ -27,7 +27,7 @@ function line_handle = plot_ternary_line( name, value, wsum, ticklinelength, var
     end
     
     % process axis name
-    iaxis = ternary_axis_name( name );
+    iaxis = identify_ternary_axis( name );
     
     %% Build line Plot
     

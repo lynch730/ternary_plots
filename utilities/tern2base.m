@@ -28,7 +28,7 @@ function [A,B,C] = tern2base( name_E, E, wsum, extra )
     %% Get integer indices from name
     
     % Determine indicies from names
-    idx_E = ternary_axis_name( name_E );
+    idx_E = identify_ternary_axis( name_E );
     
     % Linearize E to vector
     Esize = size(E); % store size before vecorizing

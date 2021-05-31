@@ -12,7 +12,7 @@ function ternary_shift_XY(handle,name,object,shift)
     end
     
     % Process name
-    iaxis = ternary_axis_name(name);
+    iaxis = identify_ternary_axis(name);
     
     % Test object string
     switch object

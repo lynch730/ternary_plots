@@ -1,5 +1,5 @@
-function idx = ternary_axis_name( name )
-%ternary_axis_name ternary axis interpreter
+function idx = identify_ternary_axis( name )
+%identify_ternary_axis ternary axis interpreter
 %   
 %   returns the correct axis index for different names. Ternary axis numbers
 %   1,2,3 correspond to string inputs left/bottom/right or l/b/r. bottom=bot. 

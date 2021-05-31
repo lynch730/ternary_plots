@@ -20,7 +20,7 @@ function [ wlimits ] = ternary_axes_limits( varargin )
 %       If more than 1 input is given, the first must be wsum, followed by
 %       three sets of weight limits that select a sub-region of the larger
 %       ternary with A,B,C ranging from 0->wsum. Three weight limits are
-%       specified by pairs of axes identifiers (see ternary_axis_name) and
+%       specified by pairs of axes identifiers (see identify_ternary_axis) and
 %       weights (e.g.
 %       ternary_axes_limits(100,'left',10,'left',90,'right',30). Axes
 %       identifiers can be strings ('left'/'right'/bottom' or 'l','b','r')
@@ -66,7 +66,7 @@ function [ wlimits ] = ternary_axes_limits( varargin )
     for i=1:3
         
         % Extract axes index from cell array
-        inp_limit(1,i) = ternary_axis_name( varargin{ (i-1)*3 + 2 } );
+        inp_limit(1,i) = identify_ternary_axis( varargin{ (i-1)*3 + 2 } );
         
         % Get value from 
         value = varargin{ (i-1)*3 + 3 };
@@ -109,7 +109,7 @@ function [ wlimits ] = ternary_axes_limits( varargin )
     end
     
     % Check that axes provided are not all the same
-    if ( range(inp_limit(:,1))==0 )
+    if ( max( inp_limit(:,1) ) - min( inp_limit(:,1) ) ) == 0
        error('All three limits cannot be along the same axis')
     end
     

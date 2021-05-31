@@ -17,8 +17,8 @@ function [X,Y] = tern2cart(name_A, A, name_B, B )
     %% Get integer indices from names, in form idx_A < idx_B
 
     % Determine indicies from names
-    idx_A = ternary_axis_name( name_A );
-    idx_B = ternary_axis_name( name_B );
+    idx_A = identify_ternary_axis( name_A );
+    idx_B = identify_ternary_axis( name_B );
     
     % Throw error if they are the same
     if ( idx_A == idx_B )
