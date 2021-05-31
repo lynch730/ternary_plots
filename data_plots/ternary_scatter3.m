@@ -73,7 +73,7 @@ function handle = ternary_scatter3(handle, name_E, E, name_F, F, ZData, Cbar, va
         handle.dataplots(end+1).object = phandle;
         
         % Get Zmax from surface data
-        handle = restack_ternary_dataplots( handle );
+        handle = restack_dataplots( handle );
         
         % Add Colorbar 
         if (cbar_flag)

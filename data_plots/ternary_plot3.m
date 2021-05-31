@@ -55,7 +55,7 @@ function handle = ternary_plot3( handle, name_E, E, name_F, F, ZData, varargin)
         handle.dataplots(end+1) = plot3( xp, yp, ZData, varargin{:} );
         
         % Check plot is on top, push it to the top
-        handle = restack_ternary_dataplots( handle );
+        handle = restack_dataplots( handle );
         
     end
     

@@ -79,7 +79,7 @@ function handle = ternary_surf(handle, name_E, E, name_F, F, ZData, Cbar, vararg
         handle.dataplots(end+1).object = phandle;
         
         % Get Zmax from surface data
-        handle = restack_ternary_dataplots( handle );
+        handle = restack_dataplots( handle );
         
         % Add Colorbar 
         if (cbar_flag)
