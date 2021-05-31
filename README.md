@@ -5,22 +5,22 @@
 MATLAB package for creating ternary plots. It is a major overhaul of the [Ternary software](https://www.mathworks.com/matlabcentral/fileexchange/7210-ternary-plots) written by Ulrich Theune. It provides a host of new features to improve plotting capabilities.
 
 ## Features
-  1. **Ternary Building Support** - Support functions are provided to help generate ternary data prior to plotting. This includes support for generating consistent axes ranges and A, B, C coordinate vectors that are uniformly spaced (e.g. for generating surface plots).
-  2. **Custom Data Tip** - Datatip that outputs ternary coordinates rather than the typical X/Y coordinates.
-  3. **Flexible Axes Limits** - Ternary axes can accept customized ranges, rather than simply 0 to 1.
-  4. **Customized and Linked Axes** - Spacing of ticks and grid lines can be customized for each variable
-  5. **Object Organization & Propery Linking** - Ternary plot objects are organized in a single ternary plot handle, and have linked properties, making edits by hand more efficient.
-  5. **Improved Property Input** - Ternary plot functions accept typical MATLAB specifications for underlying plot functions (e.g. grid lines accept all the normal "plot3()" options)
-  6. **Plot Layering** - Ternary plots can include multiple layers of plot elements, including combinations of surfaces, points, lines, text, and shapes. Support for text and shapes is in development.
+  1. **Ternary Grid Support** - Support functions are provided to help generate ternary data prior to plotting. This includes support for generating consistent axes ranges and A, B, C coordinate vectors that are uniformly spaced (e.g. for generating surface plots).
+  2. **Custom Data Tip** - A custom Datatip is provided that outputs ternary coordinates rather than the typical X/Y coordinates.
+  3. **Flexible Axes Limits** - Ternary axes can accept customized ranges, rather than simply 0 to 1. A/B/C coordinates need only sum to a constant value
+  4. **Customized Axes** - Spacing of ticks and grid lines can be customized for each variable.
+  5. ** Wrapped Functions** - Ternary equivalents of MATLAB plot functions (e.g. surf, plot3, text, etc) pass the same optional arguments, enabling easy customization.
+  6. **Object Organization & Property Linking** - Ternary plot objects are organized in a single ternary plot handle, and have linked properties, making edits by hand more efficient.
+  7. **Plot Layering** - Ternary plots can include multiple layers of plot elements, including combinations of surfaces, points, lines, text, and shapes. Lines and text are automatically "stacked" to be above surface or scatter plot. Support for text and shapes is in development, but can be implemented easily.
 
 ## Getting Started
   1. It is recommended to clone the repo to your MATLAB *userpath* folder, then add *ternary_plots/*  to your *startup.m* file (e.g. *addpath([userpath,'/ternary_plots/'])* ). This will enable running ternary plotting routines from any working directory.
   2. *basic_example.m* shows a minimalist example. *advanced_example.m* includes numerous customized axes.
-  3. To make changes or to investigate the code, it is recommended to start by reading the *ternary_axes.m* file, which does most of the heavy lifting. *ternary_surf.m* then shows how the data is used to generate a surface plot. The *problem_setup/* folder is also useful as it shows how the axes limits are obtained and A,B,C coordinates generated.
+  3. To make changes or to investigate the code, it is recommended to start by exploring the *ternary_axes.m* file, which does most of the heavy lifting. *ternary_surf.m* then shows how the data is used to generate a surface plot. The *problem_setup/* folder is also useful as it shows how the axes limits are obtained and A,B,C coordinates generated.
 
 ___
 ## File Tree
-File tree for Ternary Plots, organized roughly by order of use
+File tree for Ternary Plots, organized roughly by order of use:
 ```bash
 Ternary_Plots/
 │
@@ -63,12 +63,12 @@ The ternary handle contains all the plot objects and data used to generate the t
 ```bash
 handle
 │
-├── ax                        - Parent Axes
-├── ternaryshift(1:2)         - Shifts applied to the ternary axis in X/Y
-├── link_color{1:N}           - Cell Array of N strings that are linked for each A/B/C axis
+├── ax                        - Parent axes
+├── ternaryshift(1:2)         - X/Y shifts applied to the ternary axis as a whole (in X/Y)
+├── link_color{1:N}           - Cell Array of N strings. Elements that are linked for each A/B/C axis
 ├── axes_color_links          - Link Objects for each A/B/C axes;
 │
-├── title                     - title objects & settings
+├── title                     - A/B/C title text
 │   ├── text(1:3)                - Array of text() objects
 │   ├── titlelabels{1:3}         - Cell array of A/B/C title strings
 │   ├── shift(1:2,1:3)           - Matrix of dX/dY shifts for A/B/C title
