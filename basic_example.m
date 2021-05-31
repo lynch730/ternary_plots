@@ -6,11 +6,12 @@ clear all; close all; clc
 % (1) Add paths 
     add_ternary_paths
 
-% (2) Create Basic Ternary Axes (Sides Ranging from 0-1)
-    handle = ternary_axes;
+% (2) Create Basic Ternary Axes (Sides Ranging from 0-100)
+    wlimits = ternary_axes_limits( 100 ) ;
+    handle  = ternary_axes( { 'wlimits',  wlimits } ); 
 
 % (3) Get a set of A,B,C Test points, assuming 20 along each side
-    [A,B,C] = ternary_arrays( 20 );
+    [A,B,C] = ternary_arrays( 20, wlimits );
  
 % (5) Create example data
     Z = (A+10)*2.0 + 10*B.^1.2 - 5*sqrt(C*5);

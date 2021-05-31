@@ -16,8 +16,9 @@ add_ternary_paths
 
 %% (2) Create 2 subplots, fill first with the basic example (without colorbar)
     axes(ax1);
-    handle = ternary_axes;
-    [A,B,C] = ternary_arrays( 20 );
+    wlimits = ternary_axes_limits( 100 ) ;
+    handle = ternary_axes( { 'wlimits',  wlimits });
+    [A,B,C] = ternary_arrays( 20, wlimits );
     Z = (A+10)*2.0 + 10*B.^1.2 - 5*sqrt(C*5);
     ternary_surf( handle, 'l', A, 'b', B, Z ,'none');
     title('A Basic Example','FontSize',18)
