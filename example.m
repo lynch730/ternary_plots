@@ -51,8 +51,9 @@ add_ternary_paths
 %% (6) Plot the surface Z defiend on rows of ABC points in xmat
     
     % Create Surface Plot
-    handle = ternary_surf( handle, 'l', A, 'b', B, Z );
-    
+%     handle = ternary_surf( handle, 'l', A, 'b', B, Z );
+    handle = ternary_scatter3( handle, 'l', A, 'b', B, Z );
+
     % Set shading (e.g. flat or interp)
     shading interp
     

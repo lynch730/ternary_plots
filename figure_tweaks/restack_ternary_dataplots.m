@@ -13,9 +13,10 @@ function handle = restack_ternary_dataplots(handle)
     % Find any surface plots
     patch_idx = 0;
     for i=1:n
-
+        
        % look for object with path type (surf plot)
-       if ( handle.dataplots.object.Type == 'patch' )
+       if ( strcmp( handle.dataplots(i).object.Type , 'patch'  )==1 || ...
+            strcmp( handle.dataplots(i).object.Type , 'scatter')==1 )
 
            % If none have been encountered, save the index in dataplots
            if (patch_idx == 0)
@@ -42,8 +43,8 @@ function handle = restack_ternary_dataplots(handle)
 
            % If index is not patch_idx, and there is Zdata to access...
            if (i~=patch_idx && isfield(handle.dataplots(i).object, 'ZData') ...
-               && ~(handle.dataplots(i).object.Type=='scatter') ...
-               && ~(handle.dataplots(i).object.Type=='patch')      )
+               && strcmp( handle.dataplots(i).object.Type , 'path '  )==0  ...
+               && strcmp( handle.dataplots(i).object.Type , 'scatter')==0       )
 
                % Advance zmax
                zmax = zmax+1;
