@@ -14,24 +14,28 @@ add_ternary_paths
     ax1 = subplot(1,2,1);
     ax2 = subplot(1,2,2);
 
-%% (2) Create 2 subplots, fill first with the basic example (without colorbar)
+    
+%% (3) Create 2 subplots, fill first with the basic example (without colorbar)
     axes(ax1);
-    wlimits = ternary_axes_limits( 100 ) ;
-    handle = ternary_axes( { 'wlimits',  wlimits });
-    [A,B,C] = ternary_arrays( 20, wlimits );
+    handle = ternary_axes; % Assumes default wlimits 0->1 for all sides
+    [A,B,C] = ternary_arrays( 20 ); % Create 20 test points to plot
     Z = (A+10)*2.0 + 10*B.^1.2 - 5*sqrt(C*5);
-    ternary_surf( handle, 'l', A, 'b', B, Z ,'none');
+    ternary_surf( handle, 'l', A, 'b', B, Z ,'none'); % turn of colorbar
     title('A Basic Example','FontSize',18)
     
-%% (3) Determine ternary axis limits
-%      - Set sum of each point to 100, select 3 weights to select a
-%      "sub-region" of the ternary where each axes varies 0->100. 
+    
+%% (4) Determine ternary axis limits
+%       Set sum of each point on the ternary to 100, and select 3 weights
+%       to select a "sub-region" of the ternary, instead of having each be
+%       0->100. You can also just pass "100" for the full 0-100 range.
+%       wlimits stores the plot bounds, and is required if the data to be
+%       plotted has A/B/C triplets that exeed [0-1]
     wlimits = ternary_axes_limits( 100,'l',10,'low',...
                                        'l',60,'high',...
                                        'r',30,'low' );
                                
                                    
-%% (4) Create the Axes using customized settings; 
+%% (5) Create the Axes using customized settings; 
     
     % "vgen" is a cell array of custom settings specific to Ternary_Plots.
     %    All options are listed in ternary_axis.m ->  initialize_ternary_handle(). 
@@ -63,22 +67,23 @@ add_ternary_paths
     axes( ax2 ); % Select second subplot
     handle = ternary_axes( vgen, vout, vgrid, vtick, vlab );
 
-%% (5) Get a set of A,B,C Test points
-%      - Rows of A,B,C triplets for uniformly-spaced data, assuming 10 grid
-%        points along each of the three axes
+%% (6) Get a set of A,B,C Test points
+%      - Rows of A,B,C triplets for uniformly-spaced data, assuming 20 grid
+%        points along each of the three axes, bounded by wlimits defined
+%        earlier
      [A,B,C] = ternary_arrays( 20, wlimits );
  
  
-%% (6) Create example data
+%% (7) Create example data
      Z = A.*2.0 + 1.5.*B.^1.2 - 5.0*sqrt(C);
     
  
-%% (7) Plot the surface Z defiend on rows of ABC points in xmat
+%% (8) Plot the surface Z defiend on rows of ABC points in xmat
     
-    % Define Color bar
+    % Define a customized color bar
     Cbar = {'FontWeight','bold','Position',[0.90 0.17 0.02 0.68] };
     
-    % Create Surface Plot
+    % Create Surface Plot + colorbar
     handle = ternary_surf( handle, 'l', A, 'b', B, Z , Cbar );
     
     % Set shading (e.g. flat or interp)
@@ -90,7 +95,7 @@ add_ternary_paths
     % Add Title
     title('A Fruity Example','FontSize',18)
 
-%% Adjust Colors of axes
+%% (9) Adjust Colors of axes
 
     % Using helper function to get the right axis index
     iaxis = identify_ternary_axis( 'left' ); 
