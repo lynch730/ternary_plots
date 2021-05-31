@@ -27,7 +27,7 @@ wlimits = ternary_axes_limits( 100,'l',23,'low',...
 %     
 %    4A - Specify Settings
      vgen  = { 'wlimits', wlimits, 'usegridspace', false, ...
-              'gridspaceunit',6 , 'nameoffset', 0.15, 'axesshift', [0,0] };
+              'gridspaceunit',6 , 'nameoffset', 0.15, 'axesshift', [-0.06,0] };
      vout  = { 'LineWidth', 2, 'Color','k'};
      vgrid = { 'LineStyle','-','Color',[0 0 0 0.4] };
      vtick = { 'FontWeight','Bold', 'FontSize', 12 };
@@ -37,6 +37,6 @@ wlimits = ternary_axes_limits( 100,'l',23,'low',...
      handle = ternary_axes( vgen, vout, vgrid, vtick, vlab );
       
 %% (5) Add ternary data to the plot
-     handle = ternary_surf( handle, Z, wlimits );
+%      handle = ternary_surf( handle, Z, wlimits );
  
  

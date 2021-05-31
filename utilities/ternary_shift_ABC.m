@@ -30,13 +30,6 @@ function ternary_shift_ABC(handle,name,object,shift)
             error('Invalid Object Matching')
     end
     
-    % Get index of shift axis to ignore
-    if any(shift==0)
-        idx = 3;
-    else
-        idx = find(shift==0,1);
-    end
-    
     % Get dx/dy
     for i=1:numel(object)
         
@@ -44,29 +37,37 @@ function ternary_shift_ABC(handle,name,object,shift)
         x1 = object(i).Position(1);
         y1 = object(i).Position(2);
         
-        % Current ABC Location from Position
-        [A,B,C] = cart2tern( x1, y1 );
+        % Apply A/B/C Shift in order
+        for j = 1:3
+            
+            % Current ABC Location from Position
+            [A,B,C] = cart2tern( x1, y1 );
+            
+            % Fork Type of Shift
+            if ( j == 1 )
+                A = A + shift(j);
+                C = C - shift(j);
+                [x1,y1] = tern2cart( 1, A, 3, C );   
+            elseif ( j == 2 )
+                B = B + shift(j);
+                A = A - shift(j);
+                [x1,y1] = tern2cart( 1, A, 2, B );
+            elseif ( j == 3 )
+                C = C + shift(j);
+                B = B - shift(j);
+                [x1,y1] = tern2cart( 2, B, 3, C );
+            else
+                error('Bad Index of selection')
+            end
+            
+       % end
         
-        % Get New ABC Location
-        A = A + shift(1);
-        B = B + shift(2);
-        C = C + shift(3);
-        
-        % Fork Type
-        if ( idx == 3 )
-            [x1,y1] = tern2cart( 1, A, 2, B );   
-        elseif ( idx == 2 )
-            [x1,y1] = tern2cart( 1, A, 3, C );
-        elseif ( idx == 1 )
-            [x1,y1] = tern2cart( 2, B, 3, C );
-        else
-            error('Bad Index of selection')
-        end
-        
-        % Apply
+        % Apply Final Shift
         object(i).Position(1) = x1;
         object(i).Position(2) = y1;
         
+    end
+            
     end
     
 end
