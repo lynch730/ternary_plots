@@ -101,6 +101,7 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
     
     
     %% Apply Custom Shifts 
+    handle = ternary_shift_XY( handle, 1, 'ternary', handle.ternaryshift );
     for i=1:3
         handle = ternary_shift_XY( handle, i, 'title', handle.title.shift(:,i) );
         handle = ternary_shift_XY( handle, i, 'tick',  handle.tick.shift( :,i) );
@@ -142,7 +143,7 @@ function handle = initialize_ternary_handle( var_general )
     tern_set.tick_fmt       = '%2.0f';
     tern_set.titlelabels     = {'Variable 1','Variable 2','Variable 3'}; 
     tern_set.titlerotation  = [60.0, 0.0, -60.0]; 
-    tern_set.ternarypos     = [0.12,  0.08, 0.7, 0.8  ]; 
+    tern_set.ternaryshift    = [-0.02, -0.01]; 
     tern_set.link_color     = {'tick','title','outline'}; % excludes grid
     
     % Default Shifts (in X/Y)
@@ -187,7 +188,7 @@ function handle = initialize_ternary_handle( var_general )
     %% Store Settings in local elements
     
     % Figure shift
-    handle.ax.Position         = tern_set.ternarypos;
+    handle.ternaryshift        = tern_set.ternaryshift;
     handle.link_color          = tern_set.link_color;
     
     % Title Handle

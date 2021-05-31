@@ -9,8 +9,20 @@ clear all; close all; clc
 %      - This function can be run automatically if copied into "userpath/sartup.m
 add_ternary_paths
 
+%% (2) Create Figure with two subplots
+    ffig = figure('Name','Advanced Example','Position',[100 100 1000 400]);
+    ax1 = subplot(1,2,1);
+    ax2 = subplot(1,2,2);
 
-%% (2) Determine ternary axis limits
+%% (2) Create 2 subplots, fill first with the basic example (without colorbar)
+    axes(ax1);
+    handle = ternary_axes;
+    [A,B,C] = ternary_arrays( 20 );
+    Z = (A+10)*2.0 + 10*B.^1.2 - 5*sqrt(C*5);
+    ternary_surf( handle, 'l', A, 'b', B, Z ,'none');
+    title('A Basic Example','FontSize',18)
+    
+%% (3) Determine ternary axis limits
 %      - Set sum of each point to 100, select 3 weights to select a
 %      "sub-region" of the ternary where each axes varies 0->100. 
     wlimits = ternary_axes_limits( 100,'l',10,'low',...
@@ -18,7 +30,7 @@ add_ternary_paths
                                        'r',30,'low' );
                                
                                    
-%% (3) Create the Axes using customized settings
+%% (4) Create the Axes using customized settings; 
     
     % "vgen" is a cell array of custom settings specific to Ternary_Plots.
     %    All options are listed in ternary_axis.m ->  initialize_ternary_handle(). 
@@ -47,33 +59,37 @@ add_ternary_paths
     vlab  = { 'FontWeight','normal', 'FontSize', 14 };
         
     % Create Ternary Axes & return Handle
+    axes( ax2 ); % Select second subplot
     handle = ternary_axes( vgen, vout, vgrid, vtick, vlab );
 
-%% (4) Get a set of A,B,C Test points
+%% (5) Get a set of A,B,C Test points
 %      - Rows of A,B,C triplets for uniformly-spaced data, assuming 10 grid
 %        points along each of the three axes
      [A,B,C] = ternary_arrays( 20, wlimits );
  
  
-%% (5) Create example data
+%% (6) Create example data
      Z = A.*2.0 + 1.5.*B.^1.2 - 5.0*sqrt(C);
     
  
-%% (6) Plot the surface Z defiend on rows of ABC points in xmat
+%% (7) Plot the surface Z defiend on rows of ABC points in xmat
+    
+    % Define Color bar
+    Cbar = {'FontWeight','bold','Position',[0.90 0.17 0.02 0.68] };
     
     % Create Surface Plot
-    handle = ternary_surf( handle, 'l', A, 'b', B, Z );
+    handle = ternary_surf( handle, 'l', A, 'b', B, Z , Cbar );
     
     % Set shading (e.g. flat or interp)
-    shading flat
+    shading(ax2, 'flat')
     
     % Set colormap
-    colormap bone
+    colormap(ax2, bone)
     
     % Add Title
     title('A Fruity Example','FontSize',18)
 
-%% Set Colors of axes
+%% Adjust Colors of axes
 
     % Using helper function to get the right axis index
     iaxis = identify_ternary_axis( 'left' ); 
@@ -82,5 +98,5 @@ add_ternary_paths
     % linking)
     handle.title.text(iaxis).Color = [0.6353    0.0784    0.1843];
     
-    
+
  

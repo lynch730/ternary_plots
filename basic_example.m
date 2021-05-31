@@ -18,7 +18,7 @@ clear all; close all; clc
 % (6) Plot the surface Z defiend on rows of ABC points in xmat
     
     % Create Surface Plot
-    handle = ternary_surf( handle, 'l', A, 'b', B, Z );
+    handle = ternary_surf( handle, 'l', A, 'b', B, Z ,'none');
     
     % Add Title
     title('Example Ternary Plot','FontSize',18)
