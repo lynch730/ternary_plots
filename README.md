@@ -1,5 +1,5 @@
 # Ternary Plots
-**In Development!** MATLAB package for creating ternary plots. It is a major overhaul of the [Ternary software](https://www.mathworks.com/matlabcentral/fileexchange/7210-ternary-plots) written by Ulrich Theune. It provides a host of new features to improve plotting capabilites.
+MATLAB package for creating ternary plots. It is a major overhaul of the [Ternary software](https://www.mathworks.com/matlabcentral/fileexchange/7210-ternary-plots) written by Ulrich Theune. It provides a host of new features to improve plotting capabilites.
 
 ## Features
   1. **Ternary Building Support** - Support functions are provided to help generate ternary data prior to plotting. This includes support for generating consistent axes ranges and A,B,C triplet vectors.
@@ -17,7 +17,7 @@
 ## File Tree
 
 ## Worklist
-  1. Complete Ternary Plotting Functions
+  1. Add 
   6. Folder with plot helper functions (data tip, data tip II, create point from data tip, find max)
   7. Add sub-region plot in setup folder
   5. Finish Readme with file tree, features, and example plots

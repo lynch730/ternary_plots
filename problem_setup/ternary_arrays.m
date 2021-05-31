@@ -8,6 +8,12 @@ function [ A,B,C ] = ternary_arrays( nsim, wlimits )
 %   wlimits is the 2x3 matrix of lower and upper weights on eahc
 %   coordinate
 %
+    
+    % If wlimits not given, use default
+    if (nargin<2)
+       wlimits =  ternary_axes_limits;
+    end
+    
     %% Get basic x1,x2,x3 arrays for 0-1 Ternary basis
     
     % Set Bounds
