@@ -6,45 +6,155 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
 %   ax.Children.grid, etc ). 
 %
 %   INPUTS: (All must be in order, filled with [] if not provided, unless
-%   none are provided, in which case defaults are used or nothing extra is
-%   forwarded)
+%   none are provided, in which case defaults are used.
 % 
 %   (1) var_general: cell array containing options specific to ternary
-%   plots, identified in pairs with identifier strings: 
-%     "wlimits"        - (2x3 float ), Axis limits                (default 0-1)
-%     "customshift"    - (2x3 float ), Custom Axes shift          (default given)
-%     "usegridspace"   - (true/false), Specify griddelta, not cnt (default false)
-%     "gridspaceunit"  - (int/float ), Grid unit                  (default 6)
-%     "ticklinelength" - (float     ), Adds ticks to the outside  (default 0.05)
-%     "tick_fmt"       - (string    ), Tick text format 
-%     "axeslabels"     - (cell array), Names of Axes              
-%     "nameoffset"     - (float     ), Offset of axes title       (default 0)
-%     "axesshift"     - (float x2  ), Axes shift in x/y
+%   plots, identified in pairs of identifier strings and values: 
 %
+%     Default Ternary Settings
+%     "wlimits"        - (2x3 float ), Axis limits                
+%     "usegridspace"   - (true/false), attempt increment-spacing of 
+%                                      "gridspaceunit", not linspace
+%     "gridspaceunit"  - (int/float ), Grid unit                 
+%     "ticklinelength" - (float     ), Adds ticks to gridlines   
+%     "tick_fmt"       - (string    ), Tick text format 
+%     "axeslabels"     - (cell array), Names of Axes            
+%      
+%      Default Custom Shifts (in X/Y): 
+%     "ternaryshift"   - (2x1 float ), Whole Ternary 
+%     "titleshift"     - (2x3 float ), Axes Titles
+%     "tickshift"      - (2x3 float ), Tick Labels
+%       
 %   (2) var_outline  - Triangle "box,"  inherited by "plot()" as varargin
 %   (3) var_grid     - Grid lines,      inherited by "plot()" as varargin
 %   (4) var_tick     - Tick labels,     inherited by "text()" as varargin
 %   (5) var_label    - Axes Text Label, inherited by "text()" as varargin
 %  
+
+    %% Check inputs
+    if nargin == 0
+        var_general = {}; 
+    end
+    if nargin < 2
+        var_outline = {}; 
+    end
+    if nargin < 3
+        var_grid = {}; 
+    end    
+    if nargin < 4
+        var_tick = {}; 
+    end   
+    if nargin < 5
+        var_label = {}; 
+    end  
     
-    %% Interpret Var_General
     
-    % Create Defaults, overwrite if needed
-    vg.wlimits(1,1:3) = 0; 
-    vg.wlimits(2,1:3) = 1;  % default wlimits
-    vg.customshift(1:2,1) = [-0.03, 0.0]; %dx/dy
-    vg.customshift(1:2,2) = [-0.03, 0.0];
-    vg.customshift(1:2,3) = [  0.0, 0.0];
-    vg.usegridspace   = false; 
-    vg.gridspaceunit  = 6;
-    vg.ticklinelength = 0.08; 
-    vg.tick_fmt       = '%4.1f';
-    vg.axeslabels     = {'Variable 1','Variable 2','Variable 3'}; 
-    vg.nameoffset     = 0.0;
-    vg.axesshift     = [ -0.02, -0.05]; 
+    %% Initalize Ternary Handle
+    handle = initialize_ternary_handle( var_general );
     
-    % Overwrite fields if they are given
-    if nargin>=1
+    
+    %% Create grid spacing data for ternary
+    handle.grid.grid_pnts = axes_grid_spacing( handle.grid );
+    
+    
+    %% Call creation of each element
+    
+    % Turn on hold
+    hold on
+    
+    % Call creation of outline frame
+    handle = ternary_outlines( handle, var_outline{:} );
+    
+    % Call creation of grid lines
+    handle = ternary_grid_lines( handle, var_grid{:} );
+    
+    % Call Tick Labels
+    handle = ternary_tick_labels( handle, var_tick{:} );
+    
+    % Call Axis Lab  
+    handle = ternary_axes_titles( handle, var_label{:} );
+    
+    % Link axes colors together (can include  "handle.grid.lines(:,i)" if
+    % gridlines should be included )
+    for i=1:3
+        
+        elements = gobjects(0);
+        for j=1:numel( handle.link_color )
+            switch handle.link_color{j}
+                case 'title'
+                    elements = [ elements; handle.title.text(i) ];
+                case 'tick'
+                    elements = [ elements; handle.tick.text(:,i) ];
+                case 'grid'
+                    elements = [ elements; handle.grid.lines(:,i) ];
+                case 'outline'
+                    elements = [ elements; handle.outline.lines(i) ];
+                otherwise
+                    error(['Bad color link field name: ',handle.link_color{j}] )
+            end
+        end
+        
+        % Link Axes Properties
+        handle.axes_color_links(i) = linkprop( elements, 'Color');
+        
+    end 
+    
+    
+    %% Apply Custom Shifts 
+    for i=1:3
+        handle = ternary_shift_XY( handle, i, 'title', handle.title.shift(:,i) );
+        handle = ternary_shift_XY( handle, i, 'tick',  handle.tick.shift( :,i) );
+    end
+    
+    
+    %% Finalize Axes Appearance (need to repeat after subsequent plots)
+    
+    % Correct Axes framing
+    axis image;
+    
+    % Turn off axes framing
+    axis off;
+    
+    % Default view
+    view(2);
+    
+    
+end
+
+%% Interpret Var_General Input
+function handle = initialize_ternary_handle( var_general )
+    
+    %% Basic Setup of Handle
+    
+    % Store current MATLAB axes handle to ternary handle
+    handle.ax = gca;
+    
+    % Empty Dataplots
+    handle.dataplots = [];
+    
+    %% Setup Default Settings
+    
+    % Default Ternary Settings
+    tern_set.wlimits        = ternary_axes_limits; % 0->1
+    tern_set.usegridspace   = false; 
+    tern_set.gridspaceunit  = 6;
+    tern_set.ticklinelength = 0.08; 
+    tern_set.tick_fmt       = '%2.0f';
+    tern_set.titlelabels     = {'Variable 1','Variable 2','Variable 3'}; 
+    tern_set.titlerotation  = [60.0, 0.0, -60.0]; 
+    tern_set.ternarypos     = [0.12,  0.08, 0.7, 0.8  ]; 
+    tern_set.link_color     = {'tick','title','outline'}; % excludes grid
+    
+    % Default Shifts (in X/Y)
+    tern_set.titleshift(1:2,1) = [-0.15,  0.075 ];
+    tern_set.titleshift(1:2,2) = [ 0.0, -0.11 ];
+    tern_set.titleshift(1:2,3) = [ 0.15,  0.075 ];
+    tern_set.tickshift(1:2,1)  = [-0.03,  0.0  ]; 
+    tern_set.tickshift(1:2,2)  = [-0.03,  0.0  ];
+    tern_set.tickshift(1:2,3)  = [ 0.0,   0.0  ];
+    
+    %% Overwrite Default Settings with User Supplied Settings 
+    if ~isempty( var_general )
         
         % Number of entries
         n = numel( var_general );
@@ -52,7 +162,8 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
         % Check that gridspaceunit is given if usedgridspace is on
         if ( any(contains(var_general(1:2:n),'usegridspace' )) && ...
             ~any(contains(var_general(1:2:n),'gridspaceunit')) )
-            warning('Must specify a grid spacing increment with "usegridspace" activated!')
+            warning([ 'Must specify a grid spacing increment with',...
+                      ' "usegridspace" activated!' ])
         end
         
         % Loop through inputs x2
@@ -62,97 +173,76 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
             field = var_general{i};
             
             % Test if it matches one of the defauls
-            if ( isfield( vg, field ) )
-                vg.( field ) = var_general{i+1};
+            if ( isfield( tern_set, field ) )
+                tern_set.( field ) = var_general{i+1};
             else % throw error
-                warning(['Field ', field, ' was not valid. Entry ignored!'])
+                warning( ['Field ', field, ...
+                          ' was not valid. Entry ignored!' ] )
             end
             
         end
         
     end
     
-    % Grab Current axis or create one
-    ax = gca;
+    %% Store Settings in local elements
     
-    % Apply a standard shift to improve colorbar placement
-    ax.Position(1) = ax.Position(1) + vg.axesshift(1);
-    ax.Position(2) = ax.Position(2) + vg.axesshift(2); 
+    % Figure shift
+    handle.ax.Position         = tern_set.ternarypos;
+    handle.link_color          = tern_set.link_color;
     
-    % Turn on hold
-    hold on
+    % Title Handle
+    handle.title.titlelabels   = tern_set.titlelabels;
+    handle.title.shift         = tern_set.titleshift;
+    handle.title.rotation      = tern_set.titlerotation;
     
-    %% Call creation of outline frame
-    handle = ternary_outlines( [], var_outline );
+    % Tick Data
+    handle.tick.ticklinelength = tern_set.ticklinelength;
+    handle.tick.tick_fmt       = tern_set.tick_fmt;
+    handle.tick.shift          = tern_set.tickshift;
     
-    %% Calculate axis spacing
+    % Grid Data
+    handle.grid.usegridspace  = tern_set.usegridspace;
+    handle.grid.gridspaceunit = tern_set.gridspaceunit;
+    handle.grid.wlimits       = tern_set.wlimits;
+    
+end
+
+
+%% Axes grid spacing
+function grid_pnts = axes_grid_spacing( grid )
     
     % default grid spacing
-    grid_flag(1:3) = vg.usegridspace;
+    grid_flag(1:3) = grid.usegridspace;
     
-    % Create grid using gridspaceunit as distance between lines
-    if (vg.usegridspace)
+    % Try to create grid with increment on each axis, if activated
+    if (grid.usegridspace)
         
         % Loop Each Axis
         for i=1:3
             
-            % Convert to plot units
-            gridspace = ( vg.gridspaceunit  ) ./ ...
-                         ( vg.wlimits(2,i) - vg.wlimits(1,i) ) ;
+            % Convert to plot units (0->1)
+            gridspace = ( grid.gridspaceunit  ) ./ ...
+                         ( grid.wlimits(2,i) - grid.wlimits(1,i) ) ;
            
-            % make array based on even spaced integers
+            % Make array based on increment
             grid_pnts(i).values(:) = [0:gridspace:1.0];
             
-            % Check for failure and reset/clear to normal
+            % Check for failure and reset/clear to linspace
             if (numel(grid_pnts(i).values)<=1)
-                warning('gridspaceunit failed as increment, revert to basic');
-                vg.gridspaceunit = 6;
+                warning('gridspaceunit failed as increment, reverting to linspace');
+                grid.gridspaceunit = 6;
                 grid_flag(i)  = false;
             end
-        
+            
         end
         
     end
     
-    % Linspace grid spacing
+    % On each axis, if not spacing on increment, space on linspace
     for i=1:3
         if (~grid_flag(i))
-            grid_pnts(i).values = linspace( 0, 1, vg.gridspaceunit );
+            grid_pnts(i).values = linspace( 0, 1, grid.gridspaceunit );
         end
     end    
     
-    %% Call creation of each element
-
-    % Call creation of grid lines
-    handle = ternary_grid_lines( handle, grid_pnts, vg.ticklinelength, var_grid );
-    
-    % Call Tick Labels
-    handle = ternary_tick_labels( handle, grid_pnts, vg.wlimits, vg.tick_fmt, ... 
-                                  vg.customshift, var_tick );
-    
-    % Call Axis Lab  
-    handle = ternary_axes_titles( handle, vg.nameoffset, vg.axeslabels, ...
-                                 var_label );
-    
-    % Link axes colors together
-    for i=1:3
-        handle.axes_color_links(i) = linkprop( [ handle.grid.lines(:,i)    ; ...
-                                                 handle.outline.lines(i) ; ...
-                                                 handle.tick.text(:,i); ...
-                                                 handle.names.text(i)   ], ...
-                                                 'Color');
-    end 
-    
-    %% Finalize Axes Appearance (need to repeat after subsequent plots)
-    
-    % Correct Axes framing
-    axis image;
-
-    % Turn off axes framing
-    axis off;
-    
-    % Default view
-    view(2);
-    
 end
-

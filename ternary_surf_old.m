@@ -286,7 +286,7 @@ view(2);
 
 % Add colorbar
 handle.colorbar = colorbar;
-
+z
 % Make it equal to fontweight
 handle.colorbar.FontWeight = font_weight;
 handle.colorbar.Position(1:4) = [0.88, 0.3, 0.03, 0.6];

@@ -4,27 +4,33 @@ function handle = ternary_outlines(handle, varargin)
 %   Accepts VARARGIN as forward to customized plot settings. This function
 %   uses the convention of 0->1 plotting range
     
-    % Create defaul settings if no extra arguments supplied
-    if isempty(varargin)
-       varargin = {'Color','k','LineWidth',2};
-    else
-       varargin = varargin{:};
+    %% Check Inputs
+    
+    % Check if handle is given
+    if (nargin==0)
+       error('Too few inputs') 
     end
     
-    % Loop grid lines
+    % Create defaul settings if no extra arguments supplied
+    if ( nargin < 2 || isempty( varargin ) )
+        varargin =  {'Color','k','LineWidth',2};
+    end
+    
+    
+    %% Plot the 3 Main Outlines
     for i=1:3      
         
-        % Get axis of plot
+        % Get axis of plot adjacent
         iaxis = i - 1;
         if (iaxis==0)
             iaxis = 3;
         end
         
-        % Create line
-        handle.outline.lines(iaxis) = plot_ternary_line( i, 0, 1.0, 0, varargin );
+        % Get other ABC Coordinate
+        [A,B,~] = tern2base( i, 0.0, 1.0, 0.0);
         
-        % Set above default gridlines
-        handle.outline.lines(iaxis).ZData=[0.1,0.1];
+        % Create line
+        handle.outline.lines(iaxis) = ternary_plot3( [], 1, A, 2, B, [], varargin{:} );
         
     end
     

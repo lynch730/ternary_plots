@@ -1,4 +1,4 @@
-function ternary_shift_ABC(handle,name,object,shift)
+function ternary_shift_ABC( handle, name, object, shift )
 % ternary_shift_ABC Shift  ternary objects in groups along ternary
 % coordinates
 %   

@@ -2,9 +2,9 @@ function [ wlimits ] = ternary_axes_limits( varargin )
 %ternary_axes_limits  support function for obtaining ternary axes limits
 %   
 %   Determines the lower and upper bound limits for axes 1-3 in a 2x3
-%   matrix "wlimits" consistent with the specifications provided. The first
-%   and second rows of weight_limits correspond with lower and upper bounds
-%   respectively for axes 1,2,3.
+%   matrix "wlimits" consistent with the specifications. The first and
+%   second rows of weight_limits correspond with lower and upper bounds
+%   respectively for axes 1,2,3. (e.g. Axes 3 spans wlimits(1:2,3) )
 %    
 %   User inputs:
 %     

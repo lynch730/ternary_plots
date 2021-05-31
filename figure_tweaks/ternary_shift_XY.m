@@ -1,4 +1,4 @@
-function ternary_shift_XY(handle,name,object,shift)
+function handle = ternary_shift_XY( handle, axis_name, object, shift )
 % ternary_shift_XY Shift ternary objects in groups along cartesian coord.
 %   
 %   Ternary handle is used to find objects to shift along "name" axis.
@@ -11,26 +11,40 @@ function ternary_shift_XY(handle,name,object,shift)
        error('Too Few inputs') 
     end
     
+    % Reshape to match Position Array
+    shift = reshape( shift, [1,2] );
+    
     % Process name
-    iaxis = identify_ternary_axis(name);
+    iaxis = identify_ternary_axis(axis_name);
     
     % Test object string
     switch object
         case 'outline'
-            object = handle.outline.lines(iaxis);
+           handle.outline.lines(iaxis).Position(1:2) =  ...
+           handle.outline.lines(iaxis).Position(1:2) + shift(1:2);
+            
         case {'grid','gridlines'}
-            object = handle.grid.lines(:,iaxis);
-        case 'tick'
-            object = handle.tick.text(:,iaxis);
-        case {'name','titles'}
-            object = handle.names.text(iaxis);
+            for i=1:numel(handle.grid.lines(:,iaxis))
+               handle.grid.lines(i,iaxis).Position(1:2) =  ...
+               handle.grid.lines(i,iaxis).Position(1:2) + shift(1:2);
+            end
+            
+        case {'tick','ticks'}
+            for i=1:numel(handle.tick.text(:,iaxis))
+               handle.tick.text(i,iaxis).Position(1:2) =  ...
+               handle.tick.text(i,iaxis).Position(1:2) + shift(1:2);
+            end
+            
+        case {'titles','title'}
+            handle.title.text(iaxis).Position(1:2) =  ...
+            handle.title.text(iaxis).Position(1:2) + shift(1:2);
+            
+        case {'ternary','tern'}
+            ax = gca; % get current "axes" handle 
+            ax.Position(1:2) = ax.Position(1:2) + shift(1:2);
+            
         otherwise
             error('Invalid Object Matching')
-    end
-    
-    % Get dx/dy
-    for i=1:numel(object)
-        object(i).Position(1:2) = object(i).Position(1:2) + shift(1:2);
     end
     
 end
