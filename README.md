@@ -1,4 +1,7 @@
 # Ternary Plots
+
+![advanced_example.png](https://github.com/lynch4815/ternary_plots/blob/main/advanced_example.png)
+
 MATLAB package for creating ternary plots. It is a major overhaul of the [Ternary software](https://www.mathworks.com/matlabcentral/fileexchange/7210-ternary-plots) written by Ulrich Theune. It provides a host of new features to improve plotting capabilites.
 
 ## Features
@@ -15,6 +18,41 @@ MATLAB package for creating ternary plots. It is a major overhaul of the [Ternar
   2. Axes range from left to right, with lines of constant value from SW to NE
 
 ## File Tree
+```bash
+├── add_ternary_paths.m
+├── advanced_example.m
+├── advanced_example.m~
+├── advanced_example.png
+├── axes_creation
+│   ├── ternary_axes.m
+│   ├── ternary_axes.m~
+│   ├── ternary_axes_titles.m
+│   ├── ternary_grid_lines.m
+│   ├── ternary_outlines.m
+│   └── ternary_tick_labels.m
+├── basic_example.m
+├── data_plots
+│   ├── ternary_plot3.m
+│   ├── ternary_plot3.m~
+│   ├── ternary_scatter3.m
+│   └── ternary_surf.m
+├── figure_tweaks
+│   ├── restack_ternary_dataplots.m
+│   ├── restack_ternary_dataplots.m~
+│   ├── ternary_datatip.m
+│   ├── ternary_shift_XY.m
+│   └── ternary_shift_XY.m~
+├── LICENSE
+├── problem_setup
+│   ├── ternary_arrays.m
+│   └── ternary_axes_limits.m
+├── README.md
+└── utilities
+    ├── cart2tern.m
+    ├── identify_ternary_axis.m
+    ├── tern2base.m
+    └── tern2cart.m
+```
 
 ## Worklist
   1. Add 
