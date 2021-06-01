@@ -74,30 +74,34 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
     % Call Axis Lab  
     handle = ternary_axes_titles( handle, var_label{:} );
     
+    % The following feature is disabled because of errors in affecting
+    % transperency, which doesn't change when the 4th element of Color is
+    % changed, specifically after linking plots. This is a matlab bug. 
+    
     % Link axes colors together (can include  "handle.grid.lines(:,i)" if
-    % gridlines should be included )
-    for i=1:3
-        
-        elements = gobjects(0);
-        for j=1:numel( handle.link_color )
-            switch handle.link_color{j}
-                case 'title'
-                    elements = [ elements; handle.title.text(i) ];
-                case 'tick'
-                    elements = [ elements; handle.tick.text(:,i) ];
-                case 'grid'
-                    elements = [ elements; handle.grid.lines(:,i) ];
-                case 'outline'
-                    elements = [ elements; handle.outline.lines(i) ];
-                otherwise
-                    error(['Bad color link field name: ',handle.link_color{j}] )
-            end
-        end
-        
-        % Link Axes Properties
-        handle.axes_color_links(i) = linkprop( elements, 'Color');
-        
-    end 
+%     % gridlines should be included )
+%     for i=1:3
+%         
+%         elements = gobjects(0);
+%         for j=1:numel( handle.link_color )
+%             switch handle.link_color{j}
+%                 case 'title'
+%                     elements = [ elements; handle.title.text(i) ];
+%                 case 'tick'
+%                     elements = [ elements; handle.tick.text(:,i) ];
+%                 case 'grid'
+%                     elements = [ elements; handle.grid.lines(:,i) ];
+%                 case 'outline'
+%                     elements = [ elements; handle.outline.lines(i) ];
+%                 otherwise
+%                     error(['Bad color link field name: ',handle.link_color{j}] )
+%             end
+%         end
+%         
+%         % Link Axes Properties
+%         handle.axes_color_links(i) = linkprop( elements, 'Color');
+%         
+%     end 
     
     
     %% Apply Custom Shifts 

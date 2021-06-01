@@ -15,7 +15,7 @@ function handle = ternary_grid_lines( handle, varargin )
     
     % Create defaul settings if no extra arguments supplied
     if ( nargin < 2 || isempty( varargin ) )
-        varargin = {'LineStyle','-','LineWidth',1.25,'Color',[0 0 0 0.3]};
+        varargin = {'LineStyle','-','LineWidth',1.5,'Color',[0 0 0 0.4]};
     end
     
     %% Loop Axes and Set grid lines
@@ -43,7 +43,7 @@ function handle = ternary_grid_lines( handle, varargin )
         end
         
         % Link properties related to formatting to each axes
-        props = {'LineStyle','LineWidth','Color','Visible','Marker',...
+        props = {'LineStyle','LineWidth','Visible','Marker',...
            'MarkerEdgeColor','MarkerFaceColor','MarkerIndices',...
            'Selected','MarkerSize'};
             

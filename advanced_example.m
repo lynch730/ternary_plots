@@ -30,9 +30,9 @@ add_ternary_paths
 %       0->100. You can also just pass "100" for the full 0-100 range.
 %       wlimits stores the plot bounds, and is required if the data to be
 %       plotted has A/B/C triplets that exeed [0-1]
-    wlimits = ternary_axes_limits( 100,'l',10,'low',...
-                                       'l',60,'high',...
-                                       'r',30,'low' );
+    wlimits = ternary_axes_limits( 100,'l',20,'low',...
+                                       'l',80,'high',...
+                                       'r',10,'low' );
                                
                                    
 %% (5) Create the Axes using customized settings; 
@@ -41,18 +41,18 @@ add_ternary_paths
     %    All options are listed in ternary_axis.m ->  initialize_ternary_handle(). 
     %    This is an example of extreme customization.
     vgen  = { 'wlimits',       wlimits ,... % Axes will match wlimits ranges
-              'gridspaceunit', 10,      ... % Number of grid lines
-              'ticklinelength', 0.09,    ... % length of tick-lines
-              'tick_fmt',      '%2.1f', ... % tick label formatting
+              'gridspaceunit', 13,      ... % Number of grid lines
+              'ticklinelength', 0.04,    ... % length of tick-lines
+              'tick_fmt',      '%2.0f', ... % tick label formatting
               'titlelabels', {'Apples','Oranges','Bananas'}, ... % custom labels
               'titlerotation', [0,0,0], ... % Set all titles to horizontal
               'link_color', {'tick','title','outline','grid'},... % Link all axes colors
-              'titleshift',[ -0.22, 0, 0.22; 0.085, -0.11, 0.085 ]... % shift titles
-              'tickshift', [-0.03, -0.03, 0.0; 0.01,-0.03,0]
+              'titleshift',[ -0.18, 0, 0.18; 0.085, -0.11, 0.085 ]... % shift titles
+              'tickshift', [-0.02, -0.02, 0.0; -0.01,-0.00,0]
             };
     
 	% Ternary Axes Outline   - Passed directly to plot3() 
-    vout  = { 'LineWidth', 5, 'LineStyle', ':'};
+    vout  = { 'LineWidth', 3, 'LineStyle', '-','Color','k'};
         
     % Ternary gridlines  - Passed directly to plot3()
     vgrid = { 'LineStyle','-','LineWidth',0.5,'Color',[0 0 0 0.2] };
@@ -71,7 +71,7 @@ add_ternary_paths
 %      - Rows of A,B,C triplets for uniformly-spaced data, assuming 20 grid
 %        points along each of the three axes, bounded by wlimits defined
 %        earlier
-     [A,B,C] = ternary_arrays( 20, wlimits );
+     [A,B,C] = ternary_arrays( 31, wlimits );
  
  
 %% (7) Create example data
@@ -87,7 +87,7 @@ add_ternary_paths
     handle = ternary_surf( handle, 'l', A, 'b', B, Z , Cbar );
     
     % Set shading (e.g. flat or interp)
-    shading(ax2, 'flat')
+    shading(ax2, 'interp')
     
     % Set colormap
     colormap(ax2, bone)
@@ -102,7 +102,10 @@ add_ternary_paths
     
     % Change color by changing one element ("link_color" determines
     % linking)
-    handle.title.text(iaxis).Color = [0.6353    0.0784    0.1843];
+    handle = adjust_axis_color(handle,'left',[0.6353, 0.0784, 0.1843, 0.4]);
     
-
+    % Change LineStyle of Black lines by changing one
+    handle.grid.lines(1,1).LineWidth = 1.5;
+    handle.grid.lines(1,2).LineStyle = '--';
+    handle.grid.lines(1,3).LineStyle = '--';
  

@@ -43,16 +43,19 @@ function handle = ternary_plot3( handle, name_E, E, name_F, F, ZData, varargin)
     % Cartesian conversion
     [xp,yp] = tern2cart( idx_E, E, idx_F, F);
     
+    % Create plot handle 
+    phandle = plot3( xp, yp, ZData, varargin{:} );
+    
     %% If No Ternary Handle Was Given, just output plot3 handle
     %   This is used for initialization of ternary axes, see
     %   gridlines/outlines
     if isempty(handle)
-        handle = plot3( xp, yp, ZData, varargin{:} );
-    
+        handle = phandle;
+        
     else % Assume plot3 is called on an existing plot
         
         % Add to the list
-        handle.dataplots(end+1) = plot3( xp, yp, ZData, varargin{:} );
+        handle.dataplots(end+1) = phandle;
         
         % Check plot is on top, push it to the top
         handle = restack_dataplots( handle );
