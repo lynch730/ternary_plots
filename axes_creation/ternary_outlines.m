@@ -26,7 +26,7 @@ function handle = ternary_outlines(handle, varargin)
             iaxis = 3;
         end
         
-        % Get other ABC Coordinate
+        % Get other ABC Coordinates
         [A,B,~] = tern2base( i, 0.0, 1.0, 0.0);
         
         % Create line

@@ -6,7 +6,8 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
 %   ax.Children.grid, etc ). 
 %
 %   INPUTS: (All must be in order, filled with [] if not provided, unless
-%   none are provided, in which case defaults are used.
+%   none are provided, in which case defaults are used. initialize_ternary_handle()
+%   contains the defaults and the procedure for overwritting them with user inputs
 % 
 %   (1) var_general: cell array containing options specific to ternary
 %   plots, identified in pairs of identifier strings and values: 
@@ -112,7 +113,7 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
     end
     
     
-    %% Finalize Axes Appearance (need to repeat after subsequent plots)
+    %% Finalize Axes Appearance (may need to repeat after subsequent plots)
     
     % Correct Axes framing
     axis image;
@@ -171,7 +172,7 @@ function handle = initialize_ternary_handle( var_general )
                       ' "usegridspace" activated!' ])
         end
         
-        % Loop through inputs x2
+        % Loop through pairs of inputs in var_general
         for i=1:2:n
             
             % Copy string identifier to field
@@ -189,7 +190,7 @@ function handle = initialize_ternary_handle( var_general )
         
     end
     
-    %% Store Settings in local elements
+    %% Store Settings in local elements of handle
     
     % Figure shift
     handle.ternaryshift        = tern_set.ternaryshift;
@@ -216,7 +217,7 @@ end
 %% Axes grid spacing
 function grid_pnts = axes_grid_spacing( grid )
     
-    % default grid spacing
+    % default grid spacing applied to all three axes
     grid_flag(1:3) = grid.usegridspace;
     
     % Try to create grid with increment on each axis, if activated

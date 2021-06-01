@@ -29,8 +29,11 @@ Ternary_Plots/
 ├── add_ternary_paths.m          Adds sub-folders to the MATLAB path
 │
 ├── problem_setup/               Tools for creating ternary data
-│   ├── ternary_axes_limits.m      - Determines the limits on each A/B/C axis give 3 limits
-│   └── ternary_arrays.m           - Creates uniformly-spaced A,B,C ternary coordinates
+│   ├── ternary_axes_limits.m      - Determines the 6 limits the A/B/C axis given
+│   │                                any 3, selecting a ternary sub-region or "zooming in".
+│   │                                Allows for non-zero sum of A+B+C.
+│   └── ternary_arrays.m           - Creates uniformly-spaced A,B,C ternary coordinates.
+│                                    (Not required, but provides uniformly spaced plot data)
 │
 ├── axes_creation/               Functions for creating the empty ternary figure
 │   ├── ternary_axes.m             - Driver for creating ternary axes
@@ -98,8 +101,9 @@ handle
 ```
 
 ## Features In Development
+  1. Alternate "Restacking" that is simpler & allows for user to control plot stacking manually.
   1. Wrapper functions for patch() and text() defined using ternary coordinates
   2. Custom Datatip that plots lines of constant A/B/C at the specified point. 
   3. Functions to automatically plot specific points of interest (e.g. the maximum on the ternary)
-  4. Automatic updates of ternary figure when fields are changed.
+  4. Automatic updates of ternary figure when handle fields are changed.
   5. Uniform Units on plot objects (currently there may be some places where the X/Y plotting coordinates (0,1) do not clearly stand out compared to user-supplied coordinates). May result in unexpected behavior when altering scripts.

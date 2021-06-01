@@ -1,7 +1,7 @@
 function handle = ternary_grid_lines( handle, varargin )
 %ternary_grid_lines plots a set of grid lines for all three axes
 %   
-%   Input grid_pnts is structure array grid_pnts(1:3).values(1:N), where N
+%   grid_pnts is structure array grid_pnts(1:3).values(1:N), where N
 %   can vary for each axis. Ticklinelength gives any extra length on the
 %   base axis used for ticks
 %   
@@ -33,11 +33,11 @@ function handle = ternary_grid_lines( handle, varargin )
         % Loop grid lines
         for i = 1:numel( grid_pnts(iaxis).values )    
             
-            % First point at the base
+            % First point at the base, second on the far side, both stored in A/B
             [A,B,~] = tern2base( iaxis, grid_pnts(iaxis).values(i), ...
                                        1.0, handle.tick.ticklinelength);
            
-            % Plot3
+            % Plot3 based on two points in A/B, pass varargin elements
             handle.grid.lines(i,iaxis) = ternary_plot3( [], 1, A, 2, B, [], varargin{:} );
             
         end
@@ -47,7 +47,7 @@ function handle = ternary_grid_lines( handle, varargin )
            'MarkerEdgeColor','MarkerFaceColor','MarkerIndices',...
            'Selected','MarkerSize'};
             
-        % Link Gridlines
+        % Link these proprties to all Gridlines on an axis
         handle.grid.link_lines(iaxis) = linkprop(handle.grid.lines(:,iaxis),props);
         
     end
