@@ -102,7 +102,7 @@ add_ternary_paths
     
     % Change color by changing one element ("link_color" determines
     % linking)
-    handle = adjust_axis_color(handle,'left',[0.6353, 0.0784, 0.1843, 0.4]);
+    handle = adjust_axis_color(handle,'left',[0.6353, 0.0784, 0.1843, 0.6]);
     
     % Change LineStyle of Black lines by changing one
     handle.grid.lines(1,1).LineWidth = 1.5;

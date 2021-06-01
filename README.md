@@ -18,7 +18,6 @@ MATLAB package for creating ternary plots. It is a major overhaul of the [Ternar
   2. *basic_example.m* shows a minimalist example. *advanced_example.m* includes numerous customized axes.
   3. To make changes or to investigate the code, it is recommended to start by exploring the *ternary_axes.m* file, which does most of the heavy lifting. *ternary_surf.m* then shows how the data is used to generate a surface plot. The *problem_setup/* folder is also useful as it shows how the axes limits are obtained and A,B,C coordinates generated.
 
-___
 ## File Tree
 File tree for Ternary Plots, organized roughly by order of use:
 ```bash
@@ -56,11 +55,9 @@ Ternary_Plots/
     ├── restack_dataplots.m        - Reorders plots in handle.dataplots to ensure proper order
     ├── ternary_datatip.m          - Custom datatip to show A/B/C coordinates
     └── ternary_shift_XY.m         - Shift plot elements by a custom dX/dY
-
 ```
-___
 ## Ternary Plot Handle
-The ternary handle contains all the plot objects and data used to generate the ternary figure. It is organized in the hierarchy below. See *ternary_axes.m* and *ternary_surf.m* for main usage.
+The ternary handle contains all the plot objects and data used to generate the ternary figure. It is organized in the hierarchy below. See *ternary_axes.m* and *ternary_surf.m* for typical usage. Currently, only modifications to fields containing primitive plot handles (lines, patch, etc) will automatically update the figure, but future versions will enable automatic updates when any field is altered.
 ```bash
 handle
 │
@@ -100,10 +97,9 @@ handle
     └── colorbar              - If using scatter3 or surf, colorbar is created with handle in dataplots
 ```
 
-
 ## Features In Development
   1. Wrapper functions for patch() and text() defined using ternary coordinates
   2. Custom Datatip that plots lines of constant A/B/C at the specified point. 
   3. Functions to automatically plot specific points of interest (e.g. the maximum on the ternary)
-  4. Improved README file & instructions. 
-  5. Uniform Units on plot objects (currently there may various units used in different places)
+  4. Automatic updates of ternary figure when fields are changed.
+  5. Uniform Units on plot objects (currently there may be some places where the X/Y plotting coordinates (0,1) do not clearly stand out compared to user-supplied coordinates). May result in unexpected behavior when altering scripts.

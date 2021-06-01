@@ -25,7 +25,7 @@ function handle = adjust_axis_color(handle,name,color)
                     handle.grid.lines(i,iaxis).Color = color;
                 end
             case 'outline'
-                handle.grid.lines(iaxis).Color = color;
+                handle.outline.lines(iaxis).Color = color;
             otherwise
                 error(['Bad color link field name: ',handle.link_color{j}] )
         end

@@ -9,7 +9,7 @@ clear all; close all; clc
 % (2) Create Basic Ternary Axes (Sides Ranging from 0-1)
     handle  = ternary_axes; 
 
-% (3) Get a set of A,B,C Test points, assuming 20 along each side
+% (3) Get a set of A,B,C Test points, assuming 20 points along each side
     [A,B,C] = ternary_arrays( 20 );
     
 % (5) Create example data
