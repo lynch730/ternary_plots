@@ -52,6 +52,7 @@ Ternary_Plots/
 │   └── ternary_scatter3.m
 │
 └── figure_tweaks/               Helper functions for adjusting ternary plots
+    ├── adjust_axis_color.m        - Changes the color of an entire axis
     ├── restack_dataplots.m        - Reorders plots in handle.dataplots to ensure proper order
     ├── ternary_datatip.m          - Custom datatip to show A/B/C coordinates
     └── ternary_shift_XY.m         - Shift plot elements by a custom dX/dY
