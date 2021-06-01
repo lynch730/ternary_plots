@@ -1,8 +1,8 @@
 function add_ternary_paths
-    addpath('axes_creation/');
-    addpath('data_plots/');
-    addpath('problem_setup/');
-    addpath('figure_tweaks/');
-    addpath('utilities/');
+    addpath( [ userpath, '/ternary_plots/axes_creation/' ] );
+    addpath( [ userpath, '/ternary_plots/data_plots/'    ] );
+    addpath( [ userpath, '/ternary_plots/problem_setup/' ] );
+    addpath( [ userpath, '/ternary_plots/figure_tweaks/' ] );
+    addpath( [ userpath, '/ternary_plots/utilities/'     ] );
 end
 
