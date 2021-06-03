@@ -1,11 +1,9 @@
-function handle = ternary_grid_lines( handle, varargin )
-%ternary_grid_lines plots a set of grid lines for all three axes
+function handle = ternary_tick_lines( handle, varargin )
+% ternary_tick_lines create axes tick lines
 %   
-%   grid_pnts is structure array grid_pnts(1:3).values(1:N), where N
-%   can vary for each axis. Ticklinelength gives any extra length on the
-%   base axis used for ticks
-%   
-    
+%   Inputs 
+%
+
     %% Check Inputs
     
     % Check if handle is given
@@ -35,13 +33,21 @@ function handle = ternary_grid_lines( handle, varargin )
         
         % Loop grid lines
         for i = 1:numel( grid_pnts(iaxis).values )    
+
+            % First point at the base, second on the far side, both stored in A/B
+            [E1,F1,~] = tern2base( iaxis, grid_pnts(iaxis).values(i), ...
+                                       wlimits, handle.tick.ticklinelength(iaxis) );
             
             % First point at the base, second on the far side, both stored in A/B
-            [E,F,~] = tern2base( iaxis, grid_pnts(iaxis).values(i), ...
-                                       wlimits, 0.0 );
+            [E2,F2,~] = tern2base( iaxis, grid_pnts(iaxis).values(i), ...
+                                       wlimits, 0.0);
+            
+            % Reconstruct 
+            E = [ E1(1), E2(1) ];
+            F = [ F1(1), F2(1) ];
             
             % Plot3 based on two points in A/B, pass varargin elements
-            handle.grid.lines(i,iaxis) = ternary_plot3( wlimits, 1, E, 2, F, [], varargin{:} );
+            handle.tick.lines(i,iaxis) = ternary_plot3( wlimits, 1, E, 2, F, [], varargin{:} );
             
         end
         
@@ -51,11 +57,11 @@ function handle = ternary_grid_lines( handle, varargin )
            'Selected','MarkerSize'};
             
         % Link these proprties to all Gridlines on an axis
-        handle.grid.link_lines(iaxis) = linkprop(handle.grid.lines(:,iaxis),props);
+        handle.tick.link_lines(iaxis) = linkprop(handle.grid.lines(:,iaxis),props);
         
     end
     
     % Link All gridlines to Z position for each of changing later
-     handle.grid.link_axes = linkprop(handle.grid.lines(:),'ZData');
+    handle.tick.link_axes_tick = linkprop(handle.tick.lines(:),'ZData');
     
 end

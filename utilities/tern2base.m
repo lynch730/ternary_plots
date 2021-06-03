@@ -54,17 +54,17 @@ function [A,B,C] = tern2base( name_E, E, wlimits, extra )
         C(:,2) = wlimits(1,3);
     elseif  (idx_E==2)
         % First point, on the axes or below it
-        A(:,1) = wsum - E - wlimits(1,3);
+        A(:,1) = wsum - E - wlimits(1,3) + extra;
         B(:,1) = E;
-        C(:,1) = wlimits(1,3);
+        C(:,1) = wlimits(1,3) - extra;
         % Second Point, on the far side
         A(:,2) = wlimits(1,1);
         B(:,2) = E;
         C(:,2) = wsum - E - wlimits(1,1);
     elseif (idx_E==3)
         % First point, on the axes or below it
-        A(:,1) = wlimits(1,1);
-        B(:,1) = wsum - E - wlimits(1,1);
+        A(:,1) = wlimits(1,1) - extra;
+        B(:,1) = wsum - E - wlimits(1,1) + extra;
         C(:,1) = E;
         % Second Point, on the far side
         A(:,2) = wsum - E - wlimits(1,2);

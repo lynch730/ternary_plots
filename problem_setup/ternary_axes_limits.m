@@ -181,13 +181,30 @@ function [ wlimits ] = ternary_axes_limits( varargin )
     wlimits(1:2,3) = X(5:6);
     
     %% Test plot argument
-    if (nargin==8)
+    if (nargin==11)
         
         % Test boolean
         if (varargin{8})
            
-            % Plot
-            figure(1); clf;
+            % Create Figure
+            ffig = figure('Name','Plot Shape','Position',[100 100 500 400]);
+            
+            % Wlimits range actual
+             wlimits2 = ternary_axes_limits( wsum );
+            
+            % Plot AXes of full range
+            vgen  = { 'wlimits', wlimits2, ...
+                      'ternaryshift',[ 0.01, 0.02 ] };
+            handle = ternary_axes( vgen );
+
+            % plot sub-region
+            var = {'Color','r','LineWidth',2.0};
+            A = [wlimits(1,1),wlimits(2,1)] ; B = [wlimits(1,2),wlimits(1,2)];
+            ternary_plot3( wlimits2, 1, A, 2, B, [10,10], var{:} )
+            A = [wlimits(2,1),wlimits(1,1)] ; B = [wlimits(1,2),wlimits(2,2)];
+            ternary_plot3( wlimits2, 1, A, 2, B, [10,10], var{:} )
+            A = [wlimits(1,1),wlimits(1,1)] ; B = [wlimits(2,2),wlimits(1,2)];
+            ternary_plot3( wlimits2, 1, A, 2, B, [10,10], var{:} )
             
         end
         

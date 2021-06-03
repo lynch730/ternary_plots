@@ -1,76 +1,83 @@
-function handle = restack_dataplots(handle)
-% restack_last_plot ensures the last plot in handle.dataplots array is on
-% top. If there is one or more surface (aka patch) plots, take the first,
-% make that the base with gridlines above it, followed by other plots on
-% the list in order. Warn user of undefined behavior.
+function handle = restack_dataplots( handle, dataplots )
+% restack_last_plot Ternary plot restacking
 %
-%   NOTE: any plots with CDATA (surf, scatter3) are ignored to avoid
-%   altering ZData values
-
+%   This function accepts a ternary axes "handle" and another scalar or
+%   vector structure "dataplots" which contains a field "object" or "obj"
+%   which is the specific handle of the plot to stack (e.g.
+%   dataplots(1).object is a "patch" object, the primitive plot type
+%   produced by surf(). One could then have dataplots(2).object filled with
+%   a "scatter" type for scatter3() handle). 
+%   
+%   restack_dataplots shifts zdata of all plots to ensure data is stacked
+%   in the order of the inidicies given by dataplots. 
+% 
+%   The user may optionally include a hardcoded entry for
+%   dataplots(i).object='grid', which indicates gridlines should be plotted
+%   as the "ith" position of the plots. If no "grid" is given, gridlines
+%   are placed above the first "patch" object found, and the rest of the
+%   plots are placed above the gridlines. This works well for typical cases
+%   of a single surf() plot, but may lead to problems if there are multiple
+%   "patch" type plots. The user is encourage to use the "grid" option in
+%   these cases. 
+    
+    % To support v1.0-v1.1, restack can accept dataplots either as a
+    % seperate struct array, or as a field within handle. 
+    if (nargin < 2)
+        if ( isfield(handle,'dataplots') )
+            dataplots = handle.dataplots;
+        else
+            error(['If only one argument is passed, it must be handle',...
+                   ' and include handle.dataplots as a field'])
+        end
+    end
+    
     % Get number of data plots
-    n = numel(handle.dataplots);
-
+    n = numel(dataplots);
+    
+    % Check if dataplots contains a field named obj or object, otherwise
+    % throw error. Convert to "object" if "obj" is used.
+    if ( isfield(dataplots,'obj') )
+        for i=1:n
+            dataplots(i).object = dataplots(i).obj;
+        end
+    elseif ( ~isfield(dataplots,'obj') )
+        error('Dataplots must contain plot handles under field obj or object')
+    end
+    
+    % Check if there is a "grid" argument, otherwise it will be inserted
+    grid_insert_flag = true; % default to insertion, grid not given
+    for i=1:n
+        if strcmp( dataplots(i).object,'grid' )==1
+            grid_insert_flag = false;
+        end
+    end
+    
     % Find any surface plots
-    patch_idx = 0;
+    z = 0;
     for i=1:n
         
-       % look for object with path type (surf plot)
-       if ( strcmp( handle.dataplots(i).object.Type , 'patch'  )==1 || ...
-            strcmp( handle.dataplots(i).object.Type , 'scatter')==1 )
-
-           % If none have been encountered, save the index in dataplots
-           if (patch_idx == 0)
-                patch_idx = i;
-           else % throw warning
-              warning('Multiple surface plots detected, undefined behavior! ')
-              break
-           end
-           
-       end
-    end
-
-    % Now stack based on detected type
-    if (patch_idx>0) % there is a surface plot
-
-        % Get the level just above max of the surface plot
-        zmax = max( handle.dataplots(patch_idx).object.ZData, [], 'all' )+1.0;
-
-        % Set ZData of gridlines to zmax
-        handle.grid.lines(1).ZData(:) = zmax;
+        % Advance z
+        z = z + 1.0;
         
-        % Set ZData of outline to zmax
-        zmax = zmax + 1.0;
-        handle.outline.lines(1).ZData(:) = zmax;
-        
-        % Now go back through and stack in order
-        for i=1:n
-
-           % If index is not patch_idx, and there is Zdata to access...
-           if (i~=patch_idx && isfield(handle.dataplots(i).object, 'ZData') ...
-               && strcmp( handle.dataplots(i).object.Type , 'path '  )==0  ...
-               && strcmp( handle.dataplots(i).object.Type , 'scatter')==0       )
-
-               % Advance zmax
-               zmax = zmax+1;
-
-               % Set handle to that Zdata
-               handle.dataplots(i).object.ZData = zmax;
-            
-           end
-
-        end
-
-    else % No surface, set last plot to just above the previous
-
-        % Get level just above N-1
-        zmax = max( handle.dataplots(n-1).object.ZData, [], 'all' )+1.0;
-
-         % If it has Zdata, push most recent plot to top
-        if (isfield(handle.dataplots(n).object, 'ZData'))
-            handle.dataplots(end).object.ZData = zmax;
+        % Advance
+        if ( strcmp( dataplots(i).object,'grid' )==1 )
+            handle.grid.lines(1,1).ZData(:) = z;
+            handle.outline.lines(1,1).ZData(:) = z+0.01;
+        elseif ( strcmp( dataplots(i).object.Type , 'patch'  )==1 )
+            z = z + max( dataplots(i).object.ZData(:) );
+            if grid_insert_flag
+                grid_insert_flag = false;
+                z = max( dataplots(i).object.ZData(:) ) + 1.0;
+                handle.grid.lines(1,1).ZData(:) = z;
+                handle.outline.lines(1,1).ZData(:) = z;
+            end
+        elseif ( strcmp( dataplots(i).object.Type , 'text'  )==1 )
+            dataplots(i).object.Position(3) = z;
+        else
+            dataplots(i).object.ZData(:) = z;
         end
         
     end
-
+    
 end
 

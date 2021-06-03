@@ -1,4 +1,4 @@
-function handle = ternary_surf(handle, name_E, E, name_F, F, ZData, Cbar, varargin)
+function [phandle, chandle] = ternary_surf(wlimits, name_E, E, name_F, F, ZData, Cbar, varargin)
 %ternary_surf Plot surface on axes defined by handle.
 % 
 %    
@@ -37,10 +37,9 @@ function handle = ternary_surf(handle, name_E, E, name_F, F, ZData, Cbar, vararg
         varargin = {};
     end
     
-    
-    %% Select ternary axes, if handle was given
-    if (~isempty(handle))
-        axes(handle.ax);
+    % Check wlimit input
+    if (isempty(wlimits))
+        wlimits = ternary_axes_limits;
     end
     
     %% Obtain X/Y Coordinates
@@ -49,48 +48,18 @@ function handle = ternary_surf(handle, name_E, E, name_F, F, ZData, Cbar, vararg
     idx_E = identify_ternary_axis( name_E );
     idx_F = identify_ternary_axis( name_F );
     
-    % Local copy of wlimits 
-    wlimits = handle.grid.wlimits;
-    
-    % Convert to 0->1 units
-    E = (E - wlimits(1,idx_E))./ ( wlimits(2,idx_E) - wlimits(1,idx_E) );
-    F = (F - wlimits(1,idx_F))./ ( wlimits(2,idx_F) - wlimits(1,idx_F) );
-    
     % Cartesian conversion
-    [xp,yp] = tern2cart( idx_E, E, idx_F, F);
+    [xp,yp] = tern2cart( idx_E, E, idx_F, F, wlimits);
     
     %% Create Tri-Surface Data
     phandle = trisurf( delaunay(xp,yp), xp, yp, ZData, varargin{:} );
     
     % Set Edgecolor to none
     phandle.EdgeColor = 'none';
-%     
-%     % Set
-%     caxis([min(ZData) max(ZData)]);
-%     
     
-    %% Plot Surface Plot
-    if isempty(handle)
-        handle = phandle;
-        
-    else % Assume plot3 is called on an existing plot
-        
-        % Add to the list
-        handle.dataplots(end+1).object = phandle;
-        
-        % Get Zmax from surface data
-        handle = restack_dataplots( handle );
-        
-        % Add Colorbar 
-        if (cbar_flag)
-            handle.dataplots(end).colorbar = colorbar( Cbar{:} );
-        end
-
-    end
-    
-    
-    %% Add custom Data tip
-    wlimits = handle.grid.wlimits;
-    set(datacursormode(gcf),'UpdateFcn',{@ternary_datatip,phandle.ZData,wlimits})
+    % Add Colorbar 
+    if (cbar_flag)
+        chandle = colorbar( Cbar{:} );
+    end    
     
 end

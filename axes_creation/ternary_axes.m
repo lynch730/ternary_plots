@@ -1,4 +1,5 @@
-function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, var_label )
+function handle = ternary_axes( var_general, var_outline, var_grid, ...
+                                var_tick_line, var_tick_label, var_label )
 % ternary_axes create basic outline, gridlines, and labels for a ternary plot
 %
 %   handle contains children handle groups for the outline, grid lines, tick
@@ -43,9 +44,12 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
         var_grid = {}; 
     end    
     if nargin < 4
-        var_tick = {}; 
+        var_tick_line = {}; 
     end   
     if nargin < 5
+        var_tick_label = {}; 
+    end   
+    if nargin < 6
         var_label = {}; 
     end  
     
@@ -64,45 +68,19 @@ function handle = ternary_axes( var_general, var_outline, var_grid, var_tick, va
     hold on
     
     % Call creation of outline frame
-    handle = ternary_outlines( handle, var_outline{:} );
+    handle = ternary_outlines(    handle, var_outline{:} );
     
     % Call creation of grid lines
-    handle = ternary_grid_lines( handle, var_grid{:} );
+    handle = ternary_grid_lines(  handle, var_grid{:}    );
+
+    % Call Tick Lines
+    handle = ternary_tick_lines(  handle, var_tick_line{:}    );
     
     % Call Tick Labels
-    handle = ternary_tick_labels( handle, var_tick{:} );
+    handle = ternary_tick_labels( handle, var_tick_label{:}    );
     
     % Call Axis Lab  
-    handle = ternary_axes_titles( handle, var_label{:} );
-    
-    % The following feature is disabled because of errors in affecting
-    % transperency, which doesn't change when the 4th element of Color is
-    % changed, specifically after linking plots. This is a matlab bug. 
-    
-    % Link axes colors together (can include  "handle.grid.lines(:,i)" if
-%     % gridlines should be included )
-%     for i=1:3
-%         
-%         elements = gobjects(0);
-%         for j=1:numel( handle.link_color )
-%             switch handle.link_color{j}
-%                 case 'title'
-%                     elements = [ elements; handle.title.text(i) ];
-%                 case 'tick'
-%                     elements = [ elements; handle.tick.text(:,i) ];
-%                 case 'grid'
-%                     elements = [ elements; handle.grid.lines(:,i) ];
-%                 case 'outline'
-%                     elements = [ elements; handle.outline.lines(i) ];
-%                 otherwise
-%                     error(['Bad color link field name: ',handle.link_color{j}] )
-%             end
-%         end
-%         
-%         % Link Axes Properties
-%         handle.axes_color_links(i) = linkprop( elements, 'Color');
-%         
-%     end 
+    handle = ternary_axes_titles( handle, var_label{:}   );
     
     
     %% Apply Custom Shifts 
@@ -202,6 +180,9 @@ function handle = initialize_ternary_handle( var_general )
     handle.title.rotation      = tern_set.titlerotation;
     
     % Tick Data
+    if ( numel( tern_set.ticklinelength ) )
+        tern_set.ticklinelength(1:3) = tern_set.ticklinelength;
+    end
     handle.tick.ticklinelength = tern_set.ticklinelength;
     handle.tick.tick_fmt       = tern_set.tick_fmt;
     handle.tick.shift          = tern_set.tickshift;

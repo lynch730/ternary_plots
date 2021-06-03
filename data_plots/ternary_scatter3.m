@@ -37,18 +37,19 @@ function [phandle, chandle] = ternary_scatter3(wlimits, name_E, E, name_F, F, ZD
         varargin = {};
     end
     
+    % Check wlimit input
+    if (isempty(wlimits))
+        wlimits = ternary_axes_limits;
+    end
+    
     %% Obtain X/Y Coordinates
     
     % Indicies from name
     idx_E = identify_ternary_axis( name_E );
     idx_F = identify_ternary_axis( name_F );
     
-    % Convert to 0->1 units
-    E = (E - wlimits(1,idx_E))./ ( wlimits(2,idx_E) - wlimits(1,idx_E) );
-    F = (F - wlimits(1,idx_F))./ ( wlimits(2,idx_F) - wlimits(1,idx_F) );
-    
     % Cartesian conversion
-    [xp,yp] = tern2cart( idx_E, E, idx_F, F);
+    [xp,yp] = tern2cart( idx_E, E, idx_F, F, wlimits);
     
     % Create Scatter 3 Data plot
     phandle = scatter3( xp, yp, ZData, 40, ZData, 'filled', varargin{:} );
@@ -57,9 +58,5 @@ function [phandle, chandle] = ternary_scatter3(wlimits, name_E, E, name_F, F, ZD
     if (cbar_flag)
         chandle = colorbar( Cbar{:} );
     end
-    
-    %% Add custom Data tip
-    wlimits = handle.grid.wlimits;
-    set(datacursormode(gcf),'UpdateFcn',{@ternary_datatip,phandle.ZData,wlimits})
     
 end

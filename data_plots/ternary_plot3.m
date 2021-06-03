@@ -35,12 +35,8 @@ function phandle = ternary_plot3( wlimits, name_E, E, name_F, F, ZData, varargin
     idx_E = identify_ternary_axis( name_E );
     idx_F = identify_ternary_axis( name_F );
     
-    % Convert to 0->1 units
-    E = (E - wlimits(1,idx_E))./ ( wlimits(2,idx_E) - wlimits(1,idx_E) );
-    F = (F - wlimits(1,idx_F))./ ( wlimits(2,idx_F) - wlimits(1,idx_F) );
-    
     % Cartesian conversion
-    [xp,yp] = tern2cart( idx_E, E, idx_F, F);
+    [xp,yp] = tern2cart( idx_E, E, idx_F, F, wlimits);
     
     % Create plot handle 
     phandle = plot3( xp, yp, ZData, varargin{:} );

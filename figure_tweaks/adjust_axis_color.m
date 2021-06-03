@@ -17,6 +17,15 @@ function handle = adjust_axis_color(handle,name,color)
             case 'title'
                  handle.title.text(iaxis).Color = color;
             case 'tick'
+                for i=1:numel(handle.tick.lines(:,iaxis))
+                    handle.tick.lines(i,iaxis).Color = color;
+                    handle.tick.text(i,iaxis).Color = color;
+                end
+            case 'tick_line'
+                for i=1:numel(handle.tick.lines(:,iaxis))
+                    handle.tick.lines(i,iaxis).Color = color;
+                end
+            case 'tick_label'
                 for i=1:numel(handle.tick.text(:,iaxis))
                     handle.tick.text(i,iaxis).Color = color;
                 end

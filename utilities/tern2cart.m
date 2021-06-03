@@ -1,17 +1,17 @@
-function [X,Y] = tern2cart(name_E, E, name_F, F )
+function [X,Y] = tern2cart(name_E, E, name_F, F , wlimits )
 %tern2cart coverts ternary to cartesian units
 %
 %   Converts ternary coordinates (A,B,C) along any two axes (E/F) and to
 %   X/Y plotting coordinates. E/F can be any dimension of real numbers of
-%   the same size. E/F must be defined relative to 0-1 range. Values
-%   outside range are allowed, but user is warned if they exceed
-%   [-0.5-1.5], as this indicates a likely mistake in inputs. The plotting
-%   origin (0,0) is always the SW corner of the ternary, and side order is
-%   left, bottom, right for 1,2,3
+%   the same size. E/F values outside the wlimits range are allowed. The
+%   plotting origin (0,0) is always the SW corner of the ternary, and side
+%   order is left, bottom, right for 1,2,3
     
     % First check if length is specified
     if (nargin<4)
         error('Too few Arguments')
+    elseif (nargin<5) % default to 0->1
+        wlimits = ternary_axes_limits;
     end
     
     %% Get integer indices from names, in form idx_E < idx_F
@@ -26,18 +26,16 @@ function [X,Y] = tern2cart(name_E, E, name_F, F )
     end
     
     % Make sure A/B are in the correct order (small to large). If not, swap
+    % This is done to simplify index swapping
     if (idx_E > idx_F)
        C = E; idx_C = idx_E; % Save A
        E = F; idx_E = idx_F; % overwrite A with B
        F = C; idx_F = idx_C; % make B the original A
     end
     
-    % Check that A/B are normalized (cannot normalize because third vector
-    % is not given).
-    if ( max( E(:) + F(:) ) > 1.5 || min( E(:) + F(:) ) < -0.5  )
-       warning( [ 'A and B coordinates may not be given ',...
-                  'with respect to [0-1] range!' ] ) 
-    end
+    % Convert to 0->1 units
+    E = (E - wlimits(1,idx_E))./ ( wlimits(2,idx_E) - wlimits(1,idx_E) );
+    F = (F - wlimits(1,idx_F))./ ( wlimits(2,idx_F) - wlimits(1,idx_F) );
     
     %% Change to index 1/2 form, because that only requires one equation set
 
