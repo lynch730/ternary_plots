@@ -13,24 +13,33 @@ function handle = ternary_axes_titles( handle, varargin )
     end
     
    %% Loop Axes
-   for i=1:3
+   for iaxis=1:3
         
         % Get the axis to the right
-        ip=i+1;
-        if (ip==4)
-            ip=1;
+        iright = iaxis + 1;
+        if ( iright == 4 )
+            iright = 1;
         end
         
-        % Get Cartesian for middle-placed title
-        [xp,yp] = tern2cart( i, 0.5 , ip, 0.0 );
+        % Add customized alignement to varargin
+        var = [ varargin(:)', 'horizontalalignment', 'center', ...
+                              'verticalalignment',  'middle', ...
+                              'rotation', handle.title.rotation(iaxis) ];
         
-        % Calculate 
-        handle.title.text(i) = text( xp(1), yp(1), handle.title.titlelabels{i}, ...
-                                   'horizontalalignment','center', ...
-                                   'verticalalignment',  'middle', ...
-                                   'rotation', handle.title.rotation(i), ....
-                                   varargin{:} );
-
+        % Title String
+        str = handle.title.titlelabels{iaxis};
+        
+        % Local copy of wlimits 
+        wlimits = handle.grid.wlimits;
+        
+        % Get Halfway point
+        delta = ( wlimits(2,iaxis)-wlimits(1,iaxis) );
+        E_half = 0.5*delta + wlimits(1,iaxis);
+        
+        % Plot Text
+        handle.title.text(iaxis) = ternary_text( wlimits, iaxis, E_half, iright, wlimits(1,iright), ...
+                                                str, [], var{:} );
+        
    end
     
 end

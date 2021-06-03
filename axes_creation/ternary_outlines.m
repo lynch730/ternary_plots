@@ -16,6 +16,9 @@ function handle = ternary_outlines(handle, varargin)
         varargin =  {'Color','k','LineWidth',2};
     end
     
+    % Local copy of wlimits 
+    wlimits = handle.grid.wlimits;
+    wsum    = handle.grid.wsum;
     
     %% Plot the 3 Main Outlines
     for i=1:3      
@@ -27,10 +30,10 @@ function handle = ternary_outlines(handle, varargin)
         end
         
         % Get other ABC Coordinates
-        [A,B,~] = tern2base( i, 0.0, 1.0, 0.0);
-        
+        [A,B,~] = tern2base( i, wlimits(1,i), wlimits, 0.0);
+                
         % Create line
-        handle.outline.lines(iaxis) = ternary_plot3( [], 1, A, 2, B, [], varargin{:} );
+        handle.outline.lines(iaxis) = ternary_plot3( wlimits, 1, A, 2, B, [], varargin{:} );
         
     end
     

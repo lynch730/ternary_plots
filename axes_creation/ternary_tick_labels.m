@@ -33,32 +33,33 @@ function handle = ternary_tick_labels( handle, varargin )
     % Alignment Storage
     hz = {'right', 'right',   'left'};
     vz = {'bottom',  'top', 'bottom'};
-
+    
+    % Local copy of wlimits 
+    wlimits = handle.grid.wlimits;
+    wsum    = handle.grid.wsum;
+    
     %% Create gridlines along each axis
     for iaxis=1:3
-        
-        % Obtain Plot Points
-        plt_pnts = grid_pnts(iaxis).values.*( wlimits(2,iaxis) ...
-                                   - wlimits(1,iaxis) ) + wlimits(1,iaxis);
         
         % Loop Grid
         for i=1:numel(grid_pnts(iaxis).values)
             
             % Get local coordinate
-            [A,B,~] = tern2base( iaxis, grid_pnts(iaxis).values(i), 1.0, 0.0);
-            
-            % Convert to X/Y coordinates
-            [xp,yp] = tern2cart(1,A,2,B);
+            [E,F,~] = tern2base( iaxis, grid_pnts(iaxis).values(i), wlimits, 0.0);
             
             % String Tick Label, place with upper-right corner at end of line end
-            str = num2str( plt_pnts(i), handle.tick.tick_fmt );
-            
+            str = num2str( grid_pnts(iaxis).values(i), handle.tick.tick_fmt );
+
+            % Add customized alignement to varargin
+            var = [ varargin(:)', 'horizontalalignment', hz{iaxis}, ...
+                                'verticalalignment',  vz{iaxis}, ...
+                                'units','data', varargin{:} ];
+                    
             % Place text vertically halfway from end point to axis edge
-            handle.tick.text(i,iaxis) = text( xp(1), yp(1), str, ...
-                                         'horizontalalignment',hz{iaxis},...
-                                         'verticalalignment',  vz{iaxis},...
-                                         'units','data', varargin{:} );
-            
+            handle.tick.text(i,iaxis) = ternary_text( wlimits, 1, ...
+                                                     E(1), 2, F(1), str, ...
+                                                     [], var{:} );
+           
         end
 
         % Link properties related to formatting all together

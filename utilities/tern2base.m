@@ -1,4 +1,4 @@
-function [A,B,C] = tern2base( name_E, E, wsum, extra )
+function [A,B,C] = tern2base( name_E, E, wlimits, extra )
 %tern2base determines the edge A,B,C coordinates from one ternary coordinate
 %
 %   Take a name and a matrix of coordinates for that name, and obtains
@@ -17,7 +17,7 @@ function [A,B,C] = tern2base( name_E, E, wsum, extra )
     if (nargin<2)
         error('Too few Arguments')
     elseif (nargin<3)
-        wsum = 1.0;
+        wlimits = ternary_axes_limits;
     end
     
     % Set extra min to zero, unless given
@@ -26,6 +26,9 @@ function [A,B,C] = tern2base( name_E, E, wsum, extra )
     end
     
     %% Get integer indices from name
+    
+    % Compute wsum
+    wsum = sum(wlimits(1:2,1));
     
     % Determine indicies from names
     idx_E = identify_ternary_axis( name_E );
@@ -38,32 +41,35 @@ function [A,B,C] = tern2base( name_E, E, wsum, extra )
     A = zeros( numel(E), 2 );
     B = zeros( numel(E), 2 );
     C = zeros( numel(E), 2 );
-    
-    % Get Difference of wsum and E
-    Ediff = wsum - E;
-    
-    % Check if this reuslts in any negative values
-    if min(Ediff) < 0.0
-       error('Some values in Ediff result in <0 values with given wsum') 
-    end
-    
-    % Do Type 1 (E=A) as the default
-    
-    % First point, on the axes or below it
-    A(:,1) = E;     
-    B(:,1) = -extra;
-    C(:,1) = Ediff+extra;
-    
-    % Second Point, on the far side
-    A(:,2) = E;
-    B(:,2) = Ediff;
-    C(:,2) = 0;
      
     % Swap to match the other two cases
-    if  (idx_E==2)
-        E = B; B = A; A = C; C = E;
+    if (idx_E==1)
+        % First point, on the axes or below it
+        A(:,1) = E;     
+        B(:,1) = wlimits(1,2) - extra;
+        C(:,1) = wsum - E - wlimits(1,2) + extra;
+        % Second Point, on the far side
+        A(:,2) = E;
+        B(:,2) = wsum - E - wlimits(1,3);
+        C(:,2) = wlimits(1,3);
+    elseif  (idx_E==2)
+        % First point, on the axes or below it
+        A(:,1) = wsum - E - wlimits(1,3);
+        B(:,1) = E;
+        C(:,1) = wlimits(1,3);
+        % Second Point, on the far side
+        A(:,2) = wlimits(1,1);
+        B(:,2) = E;
+        C(:,2) = wsum - E - wlimits(1,1);
     elseif (idx_E==3)
-        E = B; B = C; C = A; A = E;
+        % First point, on the axes or below it
+        A(:,1) = wlimits(1,1);
+        B(:,1) = wsum - E - wlimits(1,1);
+        C(:,1) = E;
+        % Second Point, on the far side
+        A(:,2) = wsum - E - wlimits(1,2);
+        B(:,2) = wlimits(1,2);
+        C(:,2) = E;
     end
     
     % Remove redundant 1's to prevent extra incidices

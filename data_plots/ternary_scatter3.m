@@ -1,4 +1,4 @@
-function handle = ternary_scatter3(handle, name_E, E, name_F, F, ZData, Cbar, varargin)
+function [phandle, chandle] = ternary_scatter3(wlimits, name_E, E, name_F, F, ZData, Cbar, varargin)
 %ternary_surf Plot surface on axes defined by handle.
 % 
 %    
@@ -37,20 +37,11 @@ function handle = ternary_scatter3(handle, name_E, E, name_F, F, ZData, Cbar, va
         varargin = {};
     end
     
-    
-    %% Select ternary axes, if handle was given
-    if (~isempty(handle))
-        axes(handle.ax);
-    end
-    
     %% Obtain X/Y Coordinates
     
     % Indicies from name
     idx_E = identify_ternary_axis( name_E );
     idx_F = identify_ternary_axis( name_F );
-    
-    % Local copy of wlimits 
-    wlimits = handle.grid.wlimits;
     
     % Convert to 0->1 units
     E = (E - wlimits(1,idx_E))./ ( wlimits(2,idx_E) - wlimits(1,idx_E) );
@@ -61,27 +52,11 @@ function handle = ternary_scatter3(handle, name_E, E, name_F, F, ZData, Cbar, va
     
     % Create Scatter 3 Data plot
     phandle = scatter3( xp, yp, ZData, 40, ZData, 'filled', varargin{:} );
-
     
-    %% Plot Surface Plot
-    if isempty(handle)
-        handle = phandle;
-        
-    else % Assume plot3 is called on an existing plot
-        
-        % Add to the list
-        handle.dataplots(end+1).object = phandle;
-        
-        % Get Zmax from surface data
-        handle = restack_dataplots( handle );
-        
-        % Add Colorbar 
-        if (cbar_flag)
-            handle.dataplots(end).colorbar = colorbar( Cbar{:} );
-        end
-
+    % Colorbar handle
+    if (cbar_flag)
+        chandle = colorbar( Cbar{:} );
     end
-    
     
     %% Add custom Data tip
     wlimits = handle.grid.wlimits;

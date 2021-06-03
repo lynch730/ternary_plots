@@ -210,6 +210,7 @@ function handle = initialize_ternary_handle( var_general )
     handle.grid.usegridspace  = tern_set.usegridspace;
     handle.grid.gridspaceunit = tern_set.gridspaceunit;
     handle.grid.wlimits       = tern_set.wlimits;
+    handle.grid.wsum          = sum( tern_set.wlimits(1:2,1) );
     
 end
 
@@ -249,6 +250,12 @@ function grid_pnts = axes_grid_spacing( grid )
         if (~grid_flag(i))
             grid_pnts(i).values = linspace( 0, 1, grid.gridspaceunit );
         end
+    end    
+    
+    % Convert to user-supplied ABC Limits
+    for i=1:3
+        delta = grid.wlimits(2,i) - grid.wlimits(1,i);
+        grid_pnts(i).values = grid_pnts(i).values*delta + grid.wlimits(1,i);
     end    
     
 end
