@@ -6,29 +6,27 @@
 clear all; close all; clc
 
 %% (1) Add paths 
-%      - This function can be run automatically if copied into "userpath/sartup.m
-add_ternary_paths
-
+    % This function can be run automatically if copied into "userpath/sartup.m
+    add_ternary_paths
+    
 %% (2) Create Figure with two subplots
     ffig = figure('Name','Advanced Example','Position',[100 100 1000 400]);
     ax1 = subplot(1,2,1);
     ax2 = subplot(1,2,2);
-
     
 %% (3) Create 2 subplots, fill first with the basic example (without colorbar)
     axes(ax1);
     basic_example
     
 %% (4) Determine ternary axis limits
-%       Set sum of each point on the ternary to 100, and select 3 weights
-%       to select a "sub-region" of the ternary, instead of having each be
-%       0->100. You can also just pass "100" for the full 0-100 range.
-%       Returns wlimits which stores the plot bounds, and is required if
-%       the data to be plotted has A/B/C triplets that exeed the [0-1]
-%       range
+    % Set sum of each point on the ternary to 100, and select 3 weights
+    % To select a "sub-region" of the ternary, instead of having each be
+    % 0->100. You can also just pass "100" for the full 0-100 range.
+    % Returns wlimits which stores the plot bounds, and is required if
+    % the data to be plotted has A/B/C triplets that exeed the [0-1] range
     wlimits = ternary_axes_limits( 100,'l',20,'low',...
                                        'l',80,'high',...
-                                       'r',10,'low', true );
+                                       'r',10,'low', true ); % turn on example plot
                                
 %% (5) Create the Axes using customized settings; 
     
@@ -68,9 +66,8 @@ add_ternary_paths
     handle = ternary_axes( vgen, vout, vgrid, vtick_line, vtick_label, vlab );
     
 %% (6) Get a set of A,B,C Test points
-%      - Rows of A,B,C triplets for uniformly-spaced data, assuming 31 grid
-%        points along each of the three axes, bounded by wlimits defined
-%        earlier
+    % Rows of A,B,C triplets for uniformly-spaced data, assuming 31 grid
+	% points along each of the three axes, bounded by wlimits defined earlier
     [A,B,C] = ternary_arrays( 31, wlimits );
     
 %% (7) Create example data
@@ -98,7 +95,7 @@ add_ternary_paths
     % Reset Range of Surface Colors
     caxis([-3 5])
     
-    %% Add custom Data tip
+    % Add custom Data tip
     set(datacursormode(gcf),'UpdateFcn',{@ternary_datatip,dataplots(1).obj.ZData,wlimits})
     
     % Add Title
