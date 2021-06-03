@@ -39,7 +39,8 @@ Ternary_Plots/
 │   ├── ternary_axes.m             - Driver for creating ternary axes
 │   ├── ternary_outlines.m         - Plots frame of the ternary triangle
 │   ├── ternary_grid_lines.m       - Plots A/B/C grid lines
-│   ├── ternary_tick_labels.m      - Plots text labels on the grid lines
+│   ├── ternary_tick_labels.m      - Plots text labels on the grid lines ternary_tick_lines
+│   ├── ternary_tick_lines.m       - Plots tick lines outside axes
 │   └── ternary_axes_titles.m      - Plots A/B/C Titles
 │
 ├── utilities/                   Misc. helper functions
@@ -49,6 +50,7 @@ Ternary_Plots/
 │   └── tern2cart.m                - Convert A/B/C coordinates to X/Y plotting coordinates
 │
 ├── data_plots/                  Basic commands for plotting ternary data
+│   ├── ternary_text.m
 │   ├── ternary_plot3.m
 │   ├── ternary_surf.m
 │   └── ternary_scatter3.m
@@ -86,6 +88,7 @@ handle
 │
 ├── tick                      - A/B/C tick labels
 │   ├── text(:,3)                - Array of text() objects
+│   ├── lines(:,3)               - Array of line() objects
 │   ├── tick_fmt                 - String for formatting tick labels
 │   ├── shift(1:2,1:3)           - Matrix of dX/dY shifts for each tick label
 │   ├── ticklinelength           - length of gridline extending past frame, creating tick marks
@@ -101,9 +104,5 @@ handle
 ```
 
 ## Features In Development
-  1. Alternate "Restacking" that is simpler & allows for user to control plot stacking manually.
-  1. Wrapper functions for patch() and text() defined using ternary coordinates
-  2. Custom Datatip that plots lines of constant A/B/C at the specified point. 
-  3. Functions to automatically plot specific points of interest (e.g. the maximum on the ternary)
-  4. Automatic updates of ternary figure when handle fields are changed.
-  5. Uniform Units on plot objects (currently there may be some places where the X/Y plotting coordinates (0,1) do not clearly stand out compared to user-supplied coordinates). May result in unexpected behavior when altering scripts.
+  1. Custom Datatip that plots lines of constant A/B/C at the specified point. 
+  2. Automatic updates of ternary figure when handle fields are changed.
