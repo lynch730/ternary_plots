@@ -14,12 +14,9 @@ function [A,B,C] = cart2tern( X, Y, wlimits )
     dcos = cos(pi/3.0);
     dsin = sin(pi/3.0);
     
-    % Get Wsum
-    wsum = wlimits(1,1) + wlimits(2,2) + wlimits(1,3);
-    
     % Compute Coordinates in ABC
-    B = 0.5.*X - 0.5*(dcos/dsin).*Y;
-    A = 1.0 - (X-B)./dcos;
+    B = X - (dcos/dsin).*Y;
+    A = 1.0 - 0.5*Y/dsin - 0.5*X/dcos;
     C = 1.0 - A - B;
     
     % Convert to User-Supplied Limits

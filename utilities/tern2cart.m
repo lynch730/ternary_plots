@@ -38,7 +38,7 @@ function [X,Y] = tern2cart(name_E, E, name_F, F , wlimits )
     F = (F - wlimits(1,idx_F))./ ( wlimits(2,idx_F) - wlimits(1,idx_F) );
     
     %% Change to index 1/2 form, because that only requires one equation set
-
+    
     % Get Index 1/2 in correct order, if 3 is involved, else A=1, and B=2.
     if (idx_F == 3)
         
