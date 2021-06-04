@@ -11,7 +11,7 @@ MATLAB package for creating ternary plots. It is a major overhaul of the [Ternar
   4. **Customized Axes** - Spacing of ticks and grid lines can be customized for each variable.
   5. **Wrapped Functions** - Ternary equivalents of MATLAB plot functions (e.g. surf, plot3, text, etc) pass the same optional arguments, enabling easy customization.
   6. **Object Organization & Property Linking** - Ternary plot objects are organized in a single ternary plot handle, and have linked properties, making edits by hand more efficient.
-  7. **Plot Layering** - Ternary plots can include multiple layers of plot elements, including combinations of surfaces, points, lines, text, and shapes. Lines and text are automatically "stacked" to be above surface or scatter plot. Support for text and shapes is in development, but can be implemented easily.
+  7. **Plot Layering** - Ternary plots can include multiple layers of plot elements, including combinations of surfaces, points, lines, and text.
 
 ## Getting Started
   1. It is recommended to clone the repo to your MATLAB *userpath* folder, then add *ternary_plots/*  to your *startup.m* file (e.g. *addpath([userpath,'/ternary_plots/'])* ). This will enable running ternary plotting routines from any working directory.
