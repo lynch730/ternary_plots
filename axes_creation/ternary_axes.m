@@ -191,7 +191,9 @@ function handle = initialize_ternary_handle( var_general )
     handle.grid.usegridspace  = tern_set.usegridspace;
     handle.grid.gridspaceunit = tern_set.gridspaceunit;
     handle.grid.wlimits       = tern_set.wlimits;
-    handle.grid.wsum          = sum( tern_set.wlimits(1:2,1) );
+    handle.grid.wsum          = sum( tern_set.wlimits(1,1) + ...
+                                     tern_set.wlimits(2,2) + ...
+                                     tern_set.wlimits(1,3) );
     
 end
 

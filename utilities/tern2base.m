@@ -28,7 +28,7 @@ function [A,B,C] = tern2base( name_E, E, wlimits, extra )
     %% Get integer indices from name
     
     % Compute wsum
-    wsum = sum(wlimits(1:2,1));
+    wsum = sum( wlimits(1,1)+wlimits(2,2)+wlimits(1,3) );
     
     % Determine indicies from names
     idx_E = identify_ternary_axis( name_E );

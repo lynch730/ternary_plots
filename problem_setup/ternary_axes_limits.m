@@ -184,7 +184,7 @@ function [ wlimits ] = ternary_axes_limits( varargin )
     if (nargin==11)
         
         % Test boolean
-        if (varargin{8})
+        if (varargin{11})
            
             % Create Figure
             ffig = figure('Name','Plot Shape','Position',[100 100 500 400]);
