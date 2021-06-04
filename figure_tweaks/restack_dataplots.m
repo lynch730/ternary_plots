@@ -69,7 +69,7 @@ function handle = restack_dataplots( handle, dataplots )
                 grid_insert_flag = false;
                 z = max( dataplots(i).object.ZData(:) ) + 1.0;
                 handle.grid.lines(1,1).ZData(:) = z;
-                handle.outline.lines(1,1).ZData(:) = z;
+                handle.outline.lines(1,1).ZData(:) = z+0.01;
             end
         elseif ( strcmp( dataplots(i).object.Type , 'text'  )==1 )
             dataplots(i).object.Position(3) = z;
