@@ -5,7 +5,7 @@
     add_ternary_paths
     
 % (2) Create Basic Ternary Axes (Sides Ranging from 0-1)
-    handle  = ternary_axes; 
+    handle_base  = ternary_axes; 
     
 % (3) Get a set of A,B,C Test points, assuming 20 points along each side
     [A,B,C] = ternary_arrays( 20 );
@@ -22,4 +22,4 @@
     title('A Basic Example','FontSize',18)
     
 % (7) Restack Data Plots
-    handle = restack_dataplots(handle, dataplots);
+    handle_base = restack_dataplots(handle_base, dataplots);

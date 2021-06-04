@@ -57,7 +57,7 @@ function handle = ternary_tick_lines( handle, varargin )
            'Selected','MarkerSize'};
             
         % Link these proprties to all Gridlines on an axis
-        handle.tick.link_lines(iaxis) = linkprop(handle.grid.lines(:,iaxis),props);
+        handle.tick.link_lines(iaxis) = linkprop(handle.tick.lines(:,iaxis),props);
         
     end
     
