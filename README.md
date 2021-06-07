@@ -14,7 +14,7 @@ MATLAB package for creating ternary plots. It is a major overhaul of the [Ternar
   7. **Plot Layering** - Ternary plots can include multiple layers of plot elements, including combinations of surfaces, points, lines, and text.
 
 ## Getting Started
-  1. It is recommended to clone the repo to your MATLAB *userpath* folder, then add *ternary_plots/*  to your *startup.m* file (e.g. *addpath([userpath,'/ternary_plots/'])* ). This will enable running ternary plotting routines from any working directory.
+  1. It is recommended to clone the repo to your MATLAB *userpath* folder, then add *ternary_plots/*  to your *startup.m* file (e.g. *addpath([userpath,'/ternary_plots/'])* ). This will enable running ternary plotting routines from any working directory, after the command *add_ternary_paths* is issued.
   2. *basic_example.m* shows a minimalist example. *advanced_example.m* includes numerous customized axes.
   3. To make changes or to investigate the code, it is recommended to start by exploring the *ternary_axes.m* file, which does most of the heavy lifting. *ternary_surf.m* then shows how the data is used to generate a surface plot. The *problem_setup/* folder is also useful as it shows how the axes limits are obtained and A,B,C coordinates generated.
 
@@ -24,9 +24,11 @@ File tree for Ternary Plots, organized roughly by order of use:
 Ternary_Plots/
 │
 ├── README.md
-├── basic_example.m
-├── advanced_example.m
 ├── add_ternary_paths.m          Adds sub-folders to the MATLAB path
+│
+├── examples/                    Example scripts for generating ternary plots
+│   ├── basic_example.m
+│   └── advanced_example.m
 │
 ├── problem_setup/               Tools for creating ternary data
 │   ├── ternary_axes_limits.m      - Determines the 6 limits the A/B/C axis given
