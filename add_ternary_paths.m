@@ -8,16 +8,17 @@ function add_ternary_paths
 %   example, "basic_example.m" could exist in some other location).
     
     % Path to ternary_plots directory, wherever it resides
-    tpath = matlab.desktop.editor.getActiveFilename;
-    tpath = erase(tpath,'add_ternary_paths.m');
+%% Find Root Directory
+    [tpath,~,~] = fileparts(which('add_ternary_paths.m'));
+    addpath( tpath );
     
     % Add subfolders to path
-    addpath( [ tpath, 'axes_creation/' ] );
-    addpath( [ tpath, 'data_plots/'    ] );
-    addpath( [ tpath, 'problem_setup/' ] );
-    addpath( [ tpath, 'figure_tweaks/' ] );
-    addpath( [ tpath, 'utilities/'     ] );
-    addpath( [ tpath, 'examples/'      ] );
+    addpath( [ tpath filesep 'axes_creation' filesep ] );
+    addpath( [ tpath filesep 'data_plots'    filesep ] );
+    addpath( [ tpath filesep 'problem_setup' filesep ] );
+    addpath( [ tpath filesep 'figure_tweaks' filesep ] );
+    addpath( [ tpath filesep 'utilities'     filesep ] );
+    addpath( [ tpath filesep 'examples'      filesep ] );
     
 end
 
