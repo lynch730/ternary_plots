@@ -1,33 +1,34 @@
-function [A,B,C] = tern2base( name_E, E, wlimits, extra )
-%tern2base determines the edge A,B,C coordinates from one ternary coordinate
+function [A,B,C] = tern2base( name_E, E, wlimits, margin )
+%tern2base determines the A,B,C coordinates for the edges of the ternary,
+%   for any line going through the ternary plot
+%   
+%   For example: if a user gives E=0.5 and name_E='B', A/B/C are the
+%   coordinates to BOTH: the intercept of E=B=0.5 on the B axis, and the
+%   intercept on the C axis. 
 %
-%   Take a name and a matrix of coordinates for that name, and obtains
-%   A,B,C at the base of the axis and the other side. Wsum is needed to
-%   compute units, if not given it is assumed to be one. The dimension of
-%   A,B,C is Nd+1 compared to E, with the outside dimension ranging 1:,
-%   for the near and far axes respectively ( e.g. for E=E(1:N):
-%   A=A(1:N,1:2), B=B(1:N,1:2), ...) NOTE: E is squeezed so any weirdly
-%   shaped matricies with interior 1's (e.g. 3x1x5) will return A/B/C
-%   without the single dimension.
+%   Shape of A/B/C: All N values of E(1:N) given are stored in rows, and
+%   the Adjacent Axis (E) and Opposite Axis intercepts are stored in
+%   columns. Hence, size(A) = size(B) = size(C) = [N,2]. "Opposite" axis
+%   from the intercept is to the right: B for E=A, C for E=B, A for E=C
 %
-%   "extra_min" is an optional argument to add a length to the lower base,
-%   mainly used to get "ticks" on ternary axes
+%   NOTE: E is squeezed so any weirdly shaped matricies with interior 1's
+%   (e.g. 3x1x5) will return A/B/C without the single dimension.
+%  
+%   "margin" is an optional argument to add a length outside the axes,
+%   mainly used to get coordinates of "ticks" outside the ternary axes.
+%   If margin is a single value, only the adjacent E
     
-    % First check if length is specified
-    if (nargin<2)
-        error('Too few Arguments')
-    elseif (nargin<3)
-        wlimits = ternary_axes_limits;
-    end
-    
-    % Set extra min to zero, unless given
-    if (nargin<4)
-        extra = 0.0;
+    % Check Arguments
+    arguments
+        name_E   (1,1) {mustBeNonempty}
+        E        (:,:) double {mustBeNonempty,mustBeReal}
+        wlimits  (2,3) double {mustBeInteger} = ternary_axes_limits
+        margin   (1,1) double {mustBeReal} = 0.0 
     end
     
     %% Get integer indices from name
     
-    % Compute wsum
+    % Compute wsum, any valid point will do
     wsum = sum( wlimits(1,1)+wlimits(2,2)+wlimits(1,3) );
     
     % Determine indicies from names
@@ -46,25 +47,25 @@ function [A,B,C] = tern2base( name_E, E, wlimits, extra )
     if (idx_E==1)
         % First point, on the axes or below it
         A(:,1) = E;     
-        B(:,1) = wlimits(1,2) - extra;
-        C(:,1) = wsum - E - wlimits(1,2) + extra;
+        B(:,1) = wlimits(1,2) - margin;
+        C(:,1) = wsum - E - wlimits(1,2) + margin;
         % Second Point, on the far side
         A(:,2) = E;
         B(:,2) = wsum - E - wlimits(1,3);
         C(:,2) = wlimits(1,3);
     elseif  (idx_E==2)
         % First point, on the axes or below it
-        A(:,1) = wsum - E - wlimits(1,3) + extra;
+        A(:,1) = wsum - E - wlimits(1,3) + margin;
         B(:,1) = E;
-        C(:,1) = wlimits(1,3) - extra;
+        C(:,1) = wlimits(1,3) - margin;
         % Second Point, on the far side
         A(:,2) = wlimits(1,1);
         B(:,2) = E;
         C(:,2) = wsum - E - wlimits(1,1);
     elseif (idx_E==3)
         % First point, on the axes or below it
-        A(:,1) = wlimits(1,1) - extra;
-        B(:,1) = wsum - E - wlimits(1,1) + extra;
+        A(:,1) = wlimits(1,1) - margin;
+        B(:,1) = wsum - E - wlimits(1,1) + margin;
         C(:,1) = E;
         % Second Point, on the far side
         A(:,2) = wsum - E - wlimits(1,2);

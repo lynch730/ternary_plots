@@ -1,52 +1,64 @@
-function idx = identify_ternary_axis( name )
+function idx = identify_ternary_axis( keyword )
 %identify_ternary_axis ternary axis interpreter
 %   
-%   returns the correct axis index for different names. Ternary axis numbers
-%   1,2,3 correspond to string inputs left/bottom/right or l/b/r. bottom=bot. 
-
+%   Returns the correct axis index for a given keyword. Ternary axis index
+%   numbers 1,2,3 correspond to ABC, with key letters a/b/c or l/b/r
+%   (left/bottom/right). 
+%
+%   NOTE: Keyword cannot contain mixed key letters (e.g. keyword='leftb'
+%   would throw an error because l and b are different axes
+    
+    % Check Argument
+    arguments
+       keyword {mustBeNonempty}
+    end
+    
+    % Ensure working with char... may not be needed
+    if isstring(keyword)
+        keyword = char( keyword );
+    end
+    
     % Determine if name is a string
-    if ( ischar(name) )
+    if ( ischar(keyword) )
         
-        % If string, determine if it matches a known input
-        switch name
-            case 'left'
-                idx = 1;
-            case 'l'
-                idx = 1;
-            case 'bottom'
-                idx = 2;
-            case 'bot'
-                idx = 2;
-            case 'b'
-                idx = 2;
-            case 'right'
-                idx = 3;
-            case 'r'
-                idx = 3;
-            otherwise
-                error(['Name "',name,'" does not match a correct input string']) 
+        % Test which, if any of the three cases have a key letter contained
+        % inside "name". These are Left: a/l, Bottom: b, Right: r/c
+        irow = any( cellfun( @(x)contains(keyword,x,'IgnoreCase',true), ...
+                    {'a','l';'b','b';'r','c'} ), 2);
+        
+        % Fork Result
+        if nnz( irow )>1 % given key matches more than one axis
+            error(['Keyword "',keyword,...
+                 '" contains letters pointing to more than 1 axis']);
+        elseif nnz( irow )  == 0
+            error(['Keyword "',keyword,...
+                 '" does not contain any letters pointing to an axis']);
+        else % Valid
+            idx = find(irow);
         end
         
     % Given a numeric value
-    elseif ( isnumeric( name ) )
+    elseif ( isnumeric( keyword ) )
+        
+        % Set string
+        str_key = sprintf('%g',keyword);
         
         % If integer
-        if ( name == floor(name) )
+        if ( keyword == floor(keyword) )
             
             % If integer in correct range
-            if (name <= 3 && name > 0)
-                idx = name;
+            if (keyword <= 3 && keyword > 0)
+                idx = keyword;
             else
-                error(['Name "',name,'" is not 1, 2, or 3']) 
+                error(['Keyword "',str_key,'" is not 1, 2, or 3']) 
             end
             
         else
-            error(['Name "',name,'" is not an integer']) 
-        
+            error(['Keyword "',str_key,'" is not an integer']) 
         end
         
     else 
-        error(['Name "',name,'" is not a number or string']) 
+        error('Given keyword is not a number or string') 
     
     end
     

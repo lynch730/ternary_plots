@@ -8,17 +8,18 @@ function add_ternary_paths
 %   example, "basic_example.m" could exist in some other location).
     
     % Path to ternary_plots directory, wherever it resides
-%% Find Root Directory
-    [tpath,~,~] = fileparts(which('add_ternary_paths.m'));
-    addpath( tpath );
-    
-    % Add subfolders to path
-    addpath( [ tpath filesep 'axes_creation' filesep ] );
-    addpath( [ tpath filesep 'data_plots'    filesep ] );
-    addpath( [ tpath filesep 'problem_setup' filesep ] );
-    addpath( [ tpath filesep 'figure_tweaks' filesep ] );
-    addpath( [ tpath filesep 'utilities'     filesep ] );
-    addpath( [ tpath filesep 'examples'      filesep ] );
-    
+    %% Find Root Directory
+        [tpath,~,~] = fileparts(which('add_ternary_paths.m'));
+        addpath( tpath );
+        
+    %% Add subfolders to path
+        folders = {'axes_creation', 'data_plots', ...
+                   'figure_tweaks','utilities','examples'};
+        
+        % Add Each subfolder to path
+        for i=1:numel(folders)
+            addpath( [ tpath filesep folders{i} filesep ] );
+        end
+        
 end
 

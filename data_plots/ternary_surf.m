@@ -1,4 +1,4 @@
-function [phandle, chandle] = ternary_surf(wlimits, name_E, E, name_F, F, ZData, Cbar, varargin)
+function [phandle, chandle] = ternary_surf(wlimits, name_E, E, name_F, F, Z, Cbar, varargin)
 %ternary_surf Plot surface on axes defined by handle.
 % 
 %    
@@ -9,9 +9,9 @@ function [phandle, chandle] = ternary_surf(wlimits, name_E, E, name_F, F, ZData,
         error('Too few Inputs')
     end
     
-    % If user does not specify ZData, plot at zero
-    if ( nargin<6 || isempty(ZData) ) % if Zdata not specified
-        ZData = zeros( size(E) );
+    % If user does not specify Z, plot at zero
+    if ( nargin<6 || isempty(Z) ) % if Zdata not specified
+        Z = zeros( size(E) );
     end
     
     % Check size of E/F
@@ -20,7 +20,7 @@ function [phandle, chandle] = ternary_surf(wlimits, name_E, E, name_F, F, ZData,
     end
     
     % Check E/Z
-    if ~isequal( size(E), size(ZData) )
+    if ~isequal( size(E), size(Z) )
         error('E/F and Z inputs must be the same size')
     end
     
@@ -52,10 +52,14 @@ function [phandle, chandle] = ternary_surf(wlimits, name_E, E, name_F, F, ZData,
     [xp,yp] = tern2cart( idx_E, E, idx_F, F, wlimits);
     
     %% Create Tri-Surface Data
-    phandle = trisurf( delaunay(xp,yp), xp, yp, ZData, varargin{:} );
+    phandle = trisurf( delaunay(xp,yp), xp, yp, Z, varargin{:} );
     
     % Set Edgecolor to none
     phandle.EdgeColor = 'none';
+    
+    % Customized Data Tip
+    [A,B,C] = cart2tern( phandle, yp, wlimits );
+    ternary_datatip( phandle, A, B, C, Z );
     
     % Add Colorbar 
     if (cbar_flag)

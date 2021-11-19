@@ -9,9 +9,10 @@ function [ A,B,C ] = ternary_arrays( nsim, wlimits )
 %   coordinate
 %
     
-    % If wlimits not given, use default
-    if (nargin<2)
-       wlimits =  ternary_axes_limits;
+    % Check Arguments
+    arguments
+       nsim    (1,1) double {mustBeInteger,mustBePositive} = 31
+       wlimits (2,3) double {mustBeInteger} = ternary_axes_limits
     end
     
     %% Get basic x1,x2,x3 arrays for 0-1 Ternary basis

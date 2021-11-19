@@ -4,19 +4,19 @@ function [ wlimits ] = ternary_axes_limits( varargin )
 %   Determines the lower and upper bound limits for axes 1-3 in a 2x3
 %   matrix "wlimits" consistent with the specifications. The first and
 %   second rows of weight_limits correspond with lower and upper bounds
-%   respectively for axes 1,2,3. (e.g. Axes 3 spans wlimits(1:2,3) )
+%   respectively for axes A/B/C. (e.g. Axes C spans wlimits(1:2,3) )
 %    
 %   User inputs:
-%     
+%      
 %       If no inputs are specified, wlimits returns the default ternary
 %       range 0->1 along each axis. This corresponds to the limits used in
 %       the plotting functions. 
 %
 %       If 1 input is supplied, it must be a real scalar "wsum" which
-%       provids the upper-bound that A+B+C must equal. Axes range from
-%       0->sum. This returns a ternary plot with the largest possible range
-%       in A,B,C.
-%
+%       provids the upper-bound that A+B+C must sum to. Axes ranges will be
+%       from 0->sum. This returns a ternary plot with the largest possible
+%       range in A,B,C.
+%       
 %       If more than 1 input is given, the first must be wsum, followed by
 %       three sets of weight limits that select a sub-region of the larger
 %       ternary with A,B,C ranging from 0->wsum. Three weight limits are
@@ -25,13 +25,13 @@ function [ wlimits ] = ternary_axes_limits( varargin )
 %       ternary_axes_limits(100,'left',10,'left',90,'right',30). Axes
 %       identifiers can be strings ('left'/'right'/bottom' or 'l','b','r')
 %       or integers (1,2,3 for left, bottom, right convention).
-%
+%       
 %       If 7 arguments are given, the user can pass an eigth variable
 %       "plot_flag" which is a boolean indicator that, if true, creates an
 %       example figure to show the region of the ternary specified by the
 %       axes limits
-    
-    %% Determine Wsum
+        
+    %% Determine Wsum, sum of A/B/C Triplets
     if (nargin==0)
         wsum = 1.0;
     else 
@@ -47,7 +47,7 @@ function [ wlimits ] = ternary_axes_limits( varargin )
     
     % Finish if wsum is the only input
     if (nargin<=1)
-        wlimits(1,1:3) = 0.0; % Lower Bound
+        wlimits(1,1:3) = 0.0;  % Lower Bound
         wlimits(2,1:3) = wsum; % Upper Bound
         return
     end
@@ -110,13 +110,13 @@ function [ wlimits ] = ternary_axes_limits( varargin )
     
     % Check that axes provided are not all the same
     if ( max( inp_limit(:,1) ) - min( inp_limit(:,1) ) ) == 0
-       error('All three limits cannot be along the same axis')
+       error('All three limits cannot be along the same A/B/C axis')
     end
     
     % Check that tenrary size is not zero, which happens if any two inputs
     % are repeated
     if numel( unique( inp_limit ,'rows') ) < 6
-        error('Cannot have identical limits, or ternary would be a point')
+        error('Cannot have identical limits, or ternary would be a single point')
     end
     
     %% Determine wlimits based on processed inp_limits
@@ -168,14 +168,14 @@ function [ wlimits ] = ternary_axes_limits( varargin )
         
     end
     
-    % Solve Equation
+    % Solve Linear System for Correct Ranges
     try
         X = A\B;
     catch
         error('Failure in Matrix Solution')
     end
     
-    % Reshape
+    % Reshape Output to the Correct 2x3 form
     wlimits(1:2,1) = X(1:2);
     wlimits(1:2,2) = X(3:4);
     wlimits(1:2,3) = X(5:6);
@@ -192,11 +192,11 @@ function [ wlimits ] = ternary_axes_limits( varargin )
             % Wlimits range actual
              wlimits2 = ternary_axes_limits( wsum );
             
-            % Plot AXes of full range
+            % Plot Axes of full range
             vgen  = { 'wlimits', wlimits2, ...
                       'ternaryshift',[ 0.01, 0.02 ] };
             handle = ternary_axes( vgen );
-
+            
             % plot sub-region
             var = {'Color','r','LineWidth',2.0};
             A = [wlimits(1,1),wlimits(2,1)] ; B = [wlimits(1,2),wlimits(1,2)];

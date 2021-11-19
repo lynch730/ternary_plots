@@ -4,7 +4,7 @@
 % Additional options are added to show how various elements can be
 % customized. 
 
-clear all; close all; clc
+clear; close all; clc
 
 %% (1) Add paths 
     % This function can be run automatically if copied into "userpath/sartup.m
@@ -20,14 +20,15 @@ clear all; close all; clc
     basic_example
     
 %% (4) Determine ternary axis limits
-    % Set sum of each point on the ternary to 100, and select 3 weights
-    % To select a "sub-region" of the ternary, instead of having each be
-    % 0->100. You can also just pass "100" for the full 0-100 range.
-    % Returns wlimits which stores the plot bounds, and is required if
-    % the data to be plotted has A/B/C triplets that exeed the [0-1] range
-    wlimits = ternary_axes_limits( 100,'l',20,'low',...
-                                       'l',80,'high',...
-                                       'r',10,'low', true ); % turn on example plot
+    % Set sum of each point on the ternary to 100, and select 3 weights To
+    % select a "sub-region" of the ternary, instead of having each be
+    % 0->100. You can also just pass some number N (e.g. 100) for a default
+    % range 0-N range. Returns wlimits which stores the lower and upper
+    % bounds of A/B/C, which are required if the data to be plotted has
+    % A/B/C triplets that exeed the default [0-1] range
+    wlimits = ternary_axes_limits( 100,'A',20,'low',...
+                                       'A',80,'high',...
+                                       'C',10,'low', true ); % turn on example plot
                                
 %% (5) Create the Axes using customized settings; 
     
@@ -95,9 +96,6 @@ clear all; close all; clc
     
     % Reset Range of Surface Colors
     caxis([-3 5])
-    
-    % Add custom Data tip
-    set(datacursormode(gcf),'UpdateFcn',{@ternary_datatip,dataplots(1).obj.ZData,wlimits})
     
     % Add Title
     title('A Fruity Example','FontSize',18)

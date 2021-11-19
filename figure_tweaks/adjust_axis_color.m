@@ -40,6 +40,5 @@ function handle = adjust_axis_color(handle,name,color)
         end
     end
     
-    
 end
 

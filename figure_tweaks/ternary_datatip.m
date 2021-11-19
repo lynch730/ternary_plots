@@ -1,18 +1,32 @@
-function txt = ternary_datatip(~,event_obj,Zdata,wlimits)
-%surf_data_cursor CustomDataTip for Surf Ternary Plot
-% 
+function txt = ternary_datatip( h, A, B, C, Z )
+%surf_data_cursor CustomDataTip 
     
-    % Get the Index of the point
-    I = get(event_obj, 'DataIndex');
+    % Create a temporary datatip if DataTipTemplate doesn't exist yet
+    tip  = [];
+    if ~isfield(h,'DataTipTemplate')
+        tip = datatip( h, 1, 1, 'Visible', 'off' );
+    end
     
-    % Get Coordinates
-    pos = get(event_obj,'Position');
-    [A,B,C] = cart2tern( pos(1),pos(2),wlimits );
+    % Try to get the data tip handle
+    try
+        dtt = h.DataTipTemplate;
+    catch
+        warning('Unable to create customized datatip')
+        return 
+    end
     
-    % Get a new text array
-    txt = { ['V1 = ', num2str(A,'%6.2g')],...
-            ['V2 = ', num2str(B,'%6.2g')],...
-            ['V3 = ', num2str(C,'%6.2g')],...
-            ['Z   = ', num2str( Zdata(I),'%6.2f' )   ] };
-
+%     % Edit the Row Labels in the Data Tip
+%     dtt.DataTipRows(2:end) = []; 
+%     dtt.DataTipRows(1).Label = '';
+%     dtt.DataTipRows(1).Value = '';
+    dtt.DataTipRows(end+1) = dataTipTextRow('A',A,'%g');
+    dtt.DataTipRows(end+1) = dataTipTextRow('B',B,'%g');
+    dtt.DataTipRows(end+1) = dataTipTextRow('C',C,'%g');
+    dtt.DataTipRows(end+1) = dataTipTextRow('Z',Z,'%g');
+%     
+    % Clear tip if created
+    if ~isempty(tip)
+        delete( tip );
+    end
+    
 end

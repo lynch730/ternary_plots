@@ -2,12 +2,12 @@ function [A,B,C] = cart2tern( X, Y, wlimits )
 %cart2tern return ternary coordinates A,B,C from X-Y coordinates
 %   
 %   This assumes, X-Y are defined for A,B,C with wlimits.
-   
-    % First check if length is specified
-    if (nargin<2)
-        error('Too few Arguments')
-    elseif (nargin<3) 
-        wlimits = ternary_axes_limits;
+    
+    % Check Arguments
+    arguments
+       X (:,:) double {mustBeNonempty,mustBeReal}
+       Y (:,:) double {mustBeNonempty,mustBeReal}
+       wlimits (2,3) double {mustBeInteger} = ternary_axes_limits
     end
     
     % edge length sin/cos based on equalateral triangle
